@@ -7,7 +7,8 @@ dbt==0.12.2
 fire==0.1.3
 google-cloud-storage
 google-auth
-gspread
+gspread==3.1.0
+gspread_dataframe==3.0.2
 idna==2.7
 ipwhois
 keyrings.alt
@@ -17,6 +18,7 @@ oauth2client
 pandas==0.23.4
 psycopg2-binary==2.7.5
 pyasn1-modules
+PyBambooHR==0.7.1
 pytest
 python-dateutil==2.7.3
 pytz==2018.5
