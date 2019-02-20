@@ -2,31 +2,63 @@ stages:
   - build
   - test
 
-docker:
+### Global Vars
+variables:
+  DOCKER_DRIVE: overlay2
+
+### Job Templates
+
+.docker_build: &docker_build
   stage: build
   image: docker:latest
-  variables:
-    DOCKER_DRIVER: overlay2
   services:
     - docker:dind
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME .
-    - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
   except:
     - master
 
-docker_publish:
+.docker_publish: &docker_publish
   stage: build
   image: docker:latest
-  variables:
-    DOCKER_DRIVER: overlay2
   services:
     - docker:dind
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE:latest .
-    - docker push $CI_REGISTRY_IMAGE:latest
+    - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest .
+    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest
   only:
     - master
 
+### Jobs
+
+# Data Image
+data_build:
+  <<: *docker_build
+  variables:
+    IMAGE_NAME: data-image
+  before_script:
+    - cd data_image
+
+data_publish:
+  <<: *docker_publish
+  variables:
+    IMAGE_NAME: data-image
+  before_script:
+    - cd data_image
+
+# Airflow Image
+airflow_build:
+  <<: *docker_build
+  variables:
+    IMAGE_NAME: airflow-image
+  before_script:
+    - cd airflow_image
+
+airflow_publish:
+  <<: *docker_publish
+  variables:
+    IMAGE_NAME: airflow-image
+  before_script:
+    - cd airflow_image
