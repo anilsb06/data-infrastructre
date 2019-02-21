@@ -8,7 +8,7 @@ build:
 
 run: build
 	@echo "Building image and opening shell..."
-	@docker build -t ${IMAGE} . && docker run -i -t ${IMAGE} /bin/bash
+	@docker run -i -t ${IMAGE} /bin/bash
 
 compose: build
 	@echo "Composing airflow..."
@@ -17,3 +17,7 @@ compose: build
 cleanup:
 	@echo "Cleaning things up..."
 	@docker system prune -f
+
+listener: build
+	@echo "Starting the listener..."
+	@docker run -it -p 8081:8081 ${IMAGE} server.py
