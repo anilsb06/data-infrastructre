@@ -1,0 +1,99 @@
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: airflow-deployment
+spec:
+  selector:
+    matchLabels:
+      app: airflow
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: airflow
+    spec:
+
+      volumes:
+        - name: cloudsql-credentials
+          secret:
+            secretName: airflow
+
+      containers:
+      - name: scheduler
+        image: registry.gitlab.com/gitlab-data/data-image/airflow-image:latest
+        resources:
+          limits:
+            memory: "1000Mi"
+          requests:
+            memory: "200Mi"
+        env:
+          - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+          - name: AIRFLOW__CORE__FERNET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__FERNET_KEY
+        command: ["airflow"]
+        args: ["scheduler"]
+
+      - name: webserver
+        image: registry.gitlab.com/gitlab-data/data-image/airflow-image:latest
+        resources:
+          limits:
+            memory: "1000Mi"
+          requests:
+            memory: "200Mi"
+        env:
+          - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+          - name: AIRFLOW__CORE__FERNET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__FERNET_KEY
+        command: ["airflow"]
+        args: ["webserver"]
+        ports:
+        - containerPort: 8080
+
+      - name: listener
+        image: registry.gitlab.com/gitlab-data/data-image/airflow-image:latest
+        resources:
+          limits:
+            memory: "100Mi"
+          requests:
+            memory: "50Mi"
+        env:
+          - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__SQL_ALCHEMY_CONN
+          - name: AIRFLOW__CORE__FERNET_KEY
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__FERNET_KEY
+        command: ["server.py"]
+        ports:
+        - containerPort: 8081
+
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.11
+        command: ["/cloud_sql_proxy",
+                  "-instances=gitlab-analysis:us-west1:analytics=tcp:5432",
+                  "-credential_file=/secrets/cloudsql/cloudsql-credentials"]
+        securityContext:
+          runAsUser: 2  # non-root user
+          allowPrivilegeEscalation: false
+        volumeMounts:
+          - name: cloudsql-credentials
+            mountPath: /secrets/cloudsql/
+            readOnly: true
