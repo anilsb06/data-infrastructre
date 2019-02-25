@@ -62,5 +62,3 @@ airflow_publish:
     IMAGE_NAME: airflow-image
   before_script:
     - cd airflow_image
-
-# Airflow Deployment

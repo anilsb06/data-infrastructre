@@ -6,12 +6,6 @@ ARG AIRFLOW_HOME=/usr/local/airflow
 ARG AIRFLOW_DEPS="crypto,gcp_api,google_auth,kubernetes,password,slack"
 ENV AIRFLOW_GPL_UNIDECODE yes
 
-# Kubectl Installation
-ARG K8S_VERSION=v1.11.5
-RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$K8S_VERSION/bin/linux/amd64/kubectl
-RUN chmod +x ./kubectl
-RUN mv ./kubectl /usr/local/bin/kubectl
-
 # Airflow Installation
 RUN pip install -U pip
 RUN pip install apache-airflow[${AIRFLOW_DEPS}]==${AIRFLOW_VERSION}
