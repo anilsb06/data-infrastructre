@@ -63,7 +63,7 @@ spec:
         ports:
         - containerPort: 8080
 
-      - name: listener
+      - name: watcher
         image: registry.gitlab.com/gitlab-data/data-image/airflow-image:latest
         resources:
           limits:
@@ -81,9 +81,7 @@ spec:
               secretKeyRef:
                 name: airflow
                 key: AIRFLOW__CORE__FERNET_KEY
-        command: ["server.py"]
-        ports:
-        - containerPort: 8081
+        command: ["repo_watcher.py"]
 
       - name: cloudsql-proxy
         image: gcr.io/cloudsql-docker/gce-proxy:1.11

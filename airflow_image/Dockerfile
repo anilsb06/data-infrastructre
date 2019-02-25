@@ -22,11 +22,11 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Listening Server
-COPY server.py ${AIRFLOW_HOME}/server.py
-RUN chmod 777 -R ${AIRFLOW_HOME}/server.py
+COPY repo_watcher.py ${AIRFLOW_HOME}/repo_watcher.py
+RUN chmod 777 -R ${AIRFLOW_HOME}/repo_watcher.py
 
 # Env Config
-EXPOSE 8080 8081
+EXPOSE 8080
 ENV PATH "${AIRFLOW_HOME}:${PATH}"
 ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 WORKDIR ${AIRFLOW_HOME}

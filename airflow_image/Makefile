@@ -18,6 +18,6 @@ cleanup:
 	@echo "Cleaning things up..."
 	@docker system prune -f
 
-listener: build
-	@echo "Starting the listener..."
-	@docker run -it -p 8081:8081 ${IMAGE} server.py
+watcher: build
+	@echo "Starting the watcher..."
+	@docker run -it ${IMAGE} repo_watcher.py
