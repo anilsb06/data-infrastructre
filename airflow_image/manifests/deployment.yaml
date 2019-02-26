@@ -27,6 +27,23 @@ spec:
           requests:
             memory: "200Mi"
         env:
+          # Remote logging env vars
+          - name: AIRFLOW__CORE__REMOTE_LOGGING
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__REMOTE_LOGGING
+          - name: AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER
+          - name: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
+          # Secret Env Vars
           - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
             valueFrom:
               secretKeyRef:
@@ -37,6 +54,10 @@ spec:
               secretKeyRef:
                 name: airflow
                 key: AIRFLOW__CORE__FERNET_KEY
+        volumeMounts:
+          - name: cloudsql-credentials
+            mountPath: /secrets/cloudsql/
+            readOnly: true
         command: ["airflow"]
         args: ["scheduler"]
 
@@ -48,6 +69,23 @@ spec:
           requests:
             memory: "200Mi"
         env:
+          # Remote logging env vars
+          - name: AIRFLOW__CORE__REMOTE_LOGGING
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__REMOTE_LOGGING
+          - name: AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER
+          - name: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
+            valueFrom:
+              secretKeyRef:
+                name: airflow
+                key: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
+          # Secret Env Vars
           - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
             valueFrom:
               secretKeyRef:
@@ -58,6 +96,10 @@ spec:
               secretKeyRef:
                 name: airflow
                 key: AIRFLOW__CORE__FERNET_KEY
+        volumeMounts:
+          - name: cloudsql-credentials
+            mountPath: /secrets/cloudsql/
+            readOnly: true
         command: ["airflow"]
         args: ["webserver"]
         ports:
