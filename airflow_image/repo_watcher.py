@@ -28,11 +28,15 @@ def watch_repo(interval: int, feed: str) -> None:
     last_git_pull = datetime.now()
     while True:
         # Find the most recent merge
-        for item in feedparser.parse(feed).entries:
+        feed = feedparser.parse(feed).entries
+        for item in feed:
             if "accepted merge request" in  item.title:
                 entry_id = item.id
                 updated_at = item.updated
                 break
+        else:
+            entry_id = feed[0].id
+            updated_at = feed[0].updated
 
         logging.info("Checking RSS feed...most recent ID is {}".format(entry_id))
 
