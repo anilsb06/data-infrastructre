@@ -29,7 +29,7 @@ salesforce-bulk
 simple-salesforce
 singer-python==5.0.15
 six==1.11.0
-snowflake-sqlalchemy==1.1.6
+snowflake-sqlalchemy==1.1.10
 target-stitch==1.8.1
 tldextract
 toolz
