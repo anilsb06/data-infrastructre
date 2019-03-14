@@ -14,9 +14,16 @@ spec:
     spec:
 
       volumes:
-        - name: cloudsql-credentials
+        - name: airflow-secrets
           secret:
             secretName: airflow
+        - name: analytics-repo
+          emptyDir: {}
+        - name: airflow-logs
+          persistentVolumeClaim:
+            claimName: persistent-airflow-logs
+        - name: kube-config
+          emptyDir: {}
 
       containers:
       - name: scheduler
@@ -27,22 +34,23 @@ spec:
           requests:
             memory: "200Mi"
         env:
-          # Remote logging env vars
-          - name: AIRFLOW__CORE__REMOTE_LOGGING
+          # General
+          - name: GIT_BRANCH
+            value: "master"
+          - name: IN_CLUSTER
+            value: "False"
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: "/secrets/cloudsql/cloudsql-credentials"
+          - name: NAMESPACE
             valueFrom:
               secretKeyRef:
                 name: airflow
-                key: AIRFLOW__CORE__REMOTE_LOGGING
-          - name: AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER
+                key: NAMESPACE
+          - name: SLACK_API_TOKEN
             valueFrom:
               secretKeyRef:
                 name: airflow
-                key: AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER
-          - name: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
-            valueFrom:
-              secretKeyRef:
-                name: airflow
-                key: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
+                key: SLACK_API_TOKEN
           # Secret Env Vars
           - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
             valueFrom:
@@ -55,9 +63,15 @@ spec:
                 name: airflow
                 key: AIRFLOW__CORE__FERNET_KEY
         volumeMounts:
-          - name: cloudsql-credentials
+          - name: airflow-secrets
             mountPath: /secrets/cloudsql/
             readOnly: true
+          - name: analytics-repo
+            mountPath: /usr/local/airflow/analytics
+          - name: airflow-logs
+            mountPath: /usr/local/airflow/logs
+          - name: kube-config
+            mountPath: /root/.kube/
         command: ["airflow"]
         args: ["scheduler"]
 
@@ -69,22 +83,23 @@ spec:
           requests:
             memory: "200Mi"
         env:
-          # Remote logging env vars
-          - name: AIRFLOW__CORE__REMOTE_LOGGING
+          # General
+          - name: GIT_BRANCH
+            value: "master"
+          - name: IN_CLUSTER
+            value: "False"
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: "/secrets/cloudsql/cloudsql-credentials"
+          - name: NAMESPACE
             valueFrom:
               secretKeyRef:
                 name: airflow
-                key: AIRFLOW__CORE__REMOTE_LOGGING
-          - name: AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER
+                key: NAMESPACE
+          - name: SLACK_API_TOKEN
             valueFrom:
               secretKeyRef:
                 name: airflow
-                key: AIRFLOW__CORE__REMOTE_BASE_LOG_FOLDER
-          - name: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
-            valueFrom:
-              secretKeyRef:
-                name: airflow
-                key: AIRFLOW__CORE__REMOTE_LOG_CONN_ID
+                key: SLACK_API_TOKEN
           # Secret Env Vars
           - name: AIRFLOW__CORE__SQL_ALCHEMY_CONN
             valueFrom:
@@ -97,9 +112,15 @@ spec:
                 name: airflow
                 key: AIRFLOW__CORE__FERNET_KEY
         volumeMounts:
-          - name: cloudsql-credentials
+          - name: airflow-secrets
             mountPath: /secrets/cloudsql/
             readOnly: true
+          - name: analytics-repo
+            mountPath: /usr/local/airflow/analytics
+          - name: airflow-logs
+            mountPath: /usr/local/airflow/logs
+          - name: kube-config
+            mountPath: /root/.kube/
         command: ["airflow"]
         args: ["webserver"]
         ports:
@@ -123,7 +144,18 @@ spec:
               secretKeyRef:
                 name: airflow
                 key: AIRFLOW__CORE__FERNET_KEY
-        command: ["repo_watcher.py"]
+        volumeMounts:
+          - name: analytics-repo
+            mountPath: /usr/local/airflow/analytics
+          - name: airflow-secrets
+            mountPath: /secrets/cloudsql/
+            readOnly: true
+          - name: kube-config
+            mountPath: /root/.kube/
+        command: ["/bin/sh", "-c"]
+        args: ["gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials && \
+                gcloud container clusters get-credentials airflow --zone us-central1-a --project gitlab-analysis && \
+                repo_watcher.py"]
 
       - name: cloudsql-proxy
         image: gcr.io/cloudsql-docker/gce-proxy:1.11
@@ -134,6 +166,6 @@ spec:
           runAsUser: 2  # non-root user
           allowPrivilegeEscalation: false
         volumeMounts:
-          - name: cloudsql-credentials
+          - name: airflow-secrets
             mountPath: /secrets/cloudsql/
             readOnly: true
