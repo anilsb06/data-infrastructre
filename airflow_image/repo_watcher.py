@@ -19,10 +19,6 @@ def clone_repo(interval: int, repo: str) -> None:
     repo: https address of the git repo
     """
 
-    clone_cmd = f"git clone -b master --single-branch {repo} --depth 1"
-    subprocess.run(clone_cmd.format("clone", repo), shell=True, check=True)
-    print(f"Repo successfully cloned at: {datetime.now()}")
-
     ## TODO: Make this smarter and use merge event web hooks at some point.
     while True:
         sleep(interval * 60)
