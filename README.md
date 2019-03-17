@@ -18,9 +18,9 @@ The `default` instance logs are stored in `gs://gitlab-airflow/prod`, the `testi
 
 3.  Run `kubectl get pods` and make sure it returns successfully 
 
-4.  Set the default namespace to `testing` by running `kubectl config set-context $(kubectl config current-context) --namespace=testing`. To run commands in production (against the `default` namespace), check the documentation below regarding kube commands.
+4. * ALL OF YOUR COMMANDS TOUCH PRODUCTION, THERE IS CURRENTLY NO TESTING ENVIRONMENT IN K8S*. The canonical way to test is to use the local docker-compose setup.
 
-5. (Optional) Use the `kubectl port-forward` command to connect to the webserver by running `kubectl port-forward deployment/airflow-deployment 1234:8080` and open your browser to `localhost:1234` 
+4. (Optional) Use the `kubectl port-forward` command to connect to the webserver by running `kubectl port-forward deployment/airflow-deployment 1234:8080` and open your browser to `localhost:1234` 
 
 ##### Troubleshooting Airflow and Basic Kube Commands:
 
@@ -32,13 +32,11 @@ The `default` instance logs are stored in `gs://gitlab-airflow/prod`, the `testi
 
 - Use the `kubectl get pods` command to see a list of all pods in your current namespace.
 
-- If you followed the steps above, then the `testing` namespace will be your default namespace. However, if you need to run commands against the `default` namespace, which is our equivalent of production, you must add `-n=default` after the `kubectl` part of every command. *DO THIS ONLY IF YOU NEED TO TOUCH PRODUCTION*
+- If you need to force a pod restart, either because of Airflow lockup, continual restarts, or refreshing the Airflow image the containers are using, run `kubectl delete deployment airflow-deployment`. This will wipe out any and all pods (including ones being run by airflow so be careful). Run `kubectl apply -f airflow-image/manifests/deployment.yaml` to send the manifest back up to k8s and respawn the pods.
 
-- If you need to force a pod restart, either because of Airflow lockup, continual restarts, or refreshing the Airflow image the containers are using, run `kubectl delete pod --all`. This will wipe out any and all pods (including ones being run by airflow so be careful). As per the deployment file, the kube control plane will bring the Airflow pod back online. If you want to restart a specific pod, you can run `kubectl delete pod <pod-name>`.
+- The resource manifests for kubernetes live in `airflow-image/manifests/`. To create or update these resources in kubernetes first run `kubectl delete deployment airflow-deployment` and then run `kubectl apply -f <manifest-file.yaml>`. Because we are using a persistent volume that can only be claimed by one pod at a time we can't use the the usual `kubectl apply -f` for modifications. A fresh deployment must be set up each time.
 
-- The resource manifests for kubernetes live in `airflow-image/manifests/`. To create or update these resources in kubernetes run `kubectl apply -f <manifest-file.yaml>`. If the resource doesn't exist it will be created, if it exists it will be updated to match the new manifest.
-
--  The secret manifest files are located in 1pass as `default_secrets.yaml` and `testing_secrets.yaml`.
+-  The secret manifest files are located in 1pass as `default_secrets.yaml`.
 
 -  To be able to get to an Airflow webserver UI that lives in kubernetes, run the command `kubectl port-forward deployment/airflow-deployment 1234:8080`. You can now navigate to `localhost:1234` in a browser and it will take you to the webserver for the instance you port-forwarded to. 
 
