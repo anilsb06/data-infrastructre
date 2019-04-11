@@ -22,24 +22,35 @@ The `default` instance logs are stored in `gs://gitlab-airflow/prod`, the `testi
 
 4. (Optional) Use the `kubectl port-forward` command to connect to the webserver by running `kubectl port-forward deployment/airflow-deployment 1234:8080` and open your browser to `localhost:1234` 
 
-##### Troubleshooting Airflow and Basic Kube Commands:
+##### Common Airflow and Kubernetes Tasks
 
--  It can be easier to alias `kubectl` as `kbc`
+###### Tips
+*  We recommended aliasing `kubectl` as `kbc`
+*  The secret manifest file is in 1password in the Data Team Vault as `default_secrets.yaml`.
 
--  To see a list of resources, run `kubectl get all`. This will display any pods, deployments, replicasets, etc.
+###### Access Airflow Webserver UI
+* `kubectl port-forward deployment/airflow-deployment 1234:8080`. You can now navigate to `localhost:1234` in a browser and it will take you to the webserver for the instance you port-forwarded to. 
 
--  To see a list of persistent volumes or persistent volume claims (where the logs are stored), use the commands `kubectl get pv` and `kubectl get pvc` respectively. The command to get persistent volumes will show all volumes regardless of namespace, as persistent volumes don't belong to namespaces. Persistent volume claims do however belong to certain namespaces and therefore will only display ones within the namespace of your current context.
+###### View Resources
+* `kubectl get all`. This will display any pods, deployments, replicasets, etc.
+* `kubectl get pods` command to see a list of all pods in your current namespace.
 
-- Use the `kubectl get pods` command to see a list of all pods in your current namespace.
+###### View Persistent Volumes
+*  To see a list of persistent volumes or persistent volume claims (where the logs are stored), use the commands `kubectl get pv` and `kubectl get pvc` respectively. The command to get persistent volumes will show all volumes regardless of namespace, as persistent volumes don't belong to namespaces. Persistent volume claims do however belong to certain namespaces and therefore will only display ones within the namespace of your current context.
 
-- If you need to force a pod restart, either because of Airflow lockup, continual restarts, or refreshing the Airflow image the containers are using, run `kubectl delete deployment airflow-deployment`. This will wipe out any and all pods (including ones being run by airflow so be careful). Run `kubectl apply -f airflow-image/manifests/deployment.yaml` to send the manifest back up to k8s and respawn the pods.
+###### Restart Deployment and Pods
+* If you need to force a pod restart, either because of Airflow lockup, continual restarts, or refreshing the Airflow image the containers are using, run `kubectl delete deployment airflow-deployment`. This will wipe out any and all pods (including ones being run by airflow so be careful). Run `kubectl apply -f airflow-image/manifests/deployment.yaml` to send the manifest back up to k8s and respawn the pods.
 
-- The resource manifests for kubernetes live in `airflow-image/manifests/`. To create or update these resources in kubernetes first run `kubectl delete deployment airflow-deployment` and then run `kubectl apply -f <manifest-file.yaml>`. Because we are using a persistent volume that can only be claimed by one pod at a time we can't use the the usual `kubectl apply -f` for modifications. A fresh deployment must be set up each time.
+* The resource manifests for kubernetes live in `airflow-image/manifests/`. To create or update these resources in kubernetes first run `kubectl delete deployment airflow-deployment` and then run `kubectl apply -f <manifest-file.yaml>`. Because we are using a persistent volume that can only be claimed by one pod at a time we can't use the the usual `kubectl apply -f` for modifications. A fresh deployment must be set up each time.
 
--  The secret manifest files are located in 1pass as `default_secrets.yaml`.
-
--  To be able to get to an Airflow webserver UI that lives in kubernetes, run the command `kubectl port-forward deployment/airflow-deployment 1234:8080`. You can now navigate to `localhost:1234` in a browser and it will take you to the webserver for the instance you port-forwarded to. 
-
+###### Access Shell with Pod
 -  To get into a shell that exists in a kube pod, use the command `kubectl exec -ti <pod-name> -c <container-name> /bin/bash`. This will drop you into a shell within the pod and container that you chose. This can be useful if you want to run airflow commands directly within a shell instead of trying to do it through the webserver UI.
 
+###### Updating Secrets
 -  The easiest way to update secrets is to use the command `kubectl edit secret airflow -o yaml`, this will open the secret in a text editor and you can edit it from there. New secrets must be base64 encoded, the easiest way to do this is to use `echo -n <secret> | base64 -`. There are some `null` values in the secret file when you edit it, for the file to save successfully you must change the `null` values to `""`, otherwise it won't save properly.
+
+###### Stopping a Running DAG
+* Navigate to the graph view of the dag in question
+* Select the task in the graph view
+* In the modal that pops up select either Mark Failed or Mark Success with the Downstream option selected.
+* Confirm in the [Kubernetes workloads tab](https://console.cloud.google.com/kubernetes/workload?project=gitlab-analysis&workload_list_tablesize=50) that the relevant pod is stopped. Delete it if necessary.
