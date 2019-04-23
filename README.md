@@ -54,3 +54,55 @@ The `default` instance logs are stored in `gs://gitlab-airflow/prod`, the `testi
 * Select the task in the graph view
 * In the modal that pops up select either Mark Failed or Mark Success with the Downstream option selected.
 * Confirm in the [Kubernetes workloads tab](https://console.cloud.google.com/kubernetes/workload?project=gitlab-analysis&workload_list_tablesize=50) that the relevant pod is stopped. Delete it if necessary.
+
+
+## Updating the Runner
+
+We execute our CI jobs in Kubernetes in the `gitlab-analysis` project. In the case where a new group runner token needs to be associated, or if we need to update the runner image. These are the basic steps.
+
+To get things installed
+
+`brew install kubernetes-helm`
+
+ `gcloud components install kubectl`
+
+To get the credentials 
+
+`gcloud container clusters get-credentials bizops-runner --zone us-west1-a --project gitlab-analysis`
+
+To see the helm releases
+
+`helm list`
+
+To get the chart values for a specific release
+
+`helm get values <release_name>`
+
+Prep commands
+
+`helm init --client-only`
+`helm repo add gitlab https://charts.gitlab.io`
+`helm repo update`
+
+To delete a release
+
+`helm del --purge <release_name>`
+
+To install a release
+
+`helm install --namespace <namespace> --name <release_name> -f values.yaml <chart_name>`
+
+Example for updating the group token 
+
+```bash
+gcloud components update
+helm get values gitlab-runner
+helm init
+helm get values gitlab-data
+touch values.yml
+<save values to values.yml>
+helm list
+helm del --purge gitlab-data
+helm install --namespace gitlab-data --name gitlab-data -f values.yaml gitlab/gitlab-runner
+kubectl get pod -n gitlab-data
+```
