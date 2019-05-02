@@ -72,6 +72,11 @@ The `default` instance logs are stored in `gs://gitlab-airflow/prod`, the `testi
 * In the modal that pops up select either Mark Failed or Mark Success with the Downstream option selected.
 * Confirm in the [Kubernetes workloads tab](https://console.cloud.google.com/kubernetes/workload?project=gitlab-analysis&workload_list_tablesize=50) that the relevant pod is stopped. Delete it if necessary.
 
+###### Running specific tasks within a DAG
+
+* Get a shell running within a container with the command `kubectl exec -ti <pod_name> -c <webserver|scheduler> /bin/bash`
+* For the simplest cases, `airflow run <dag_id> <task_id> <execution_date>` will be sufficient.
+* For more complex cases, such as when you need to run a `dbt full-refresh`, a few more flags are required. `airflow run dbt dbt-full-refresh <execution_date> -f -A`. The `-f` flag forces the task to run even if it is already marked as a success of failure. The `-A` flag tells it to run regardless of any dependencies it should have.
 
 ## Updating the Runner
 
