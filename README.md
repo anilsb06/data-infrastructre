@@ -29,7 +29,13 @@ The `default` instance logs are stored in `gs://gitlab-airflow/prod`, the `testi
 *  The secret manifest file is in 1password in the Data Team Vault as `default_secrets.yaml`.
 
 ###### Access Airflow Webserver UI
-* `kubectl port-forward deployment/airflow-deployment 1234:8080`. You can now navigate to `localhost:1234` in a browser and it will take you to the webserver for the instance you port-forwarded to. 
+* `kubectl port-forward deployment/airflow-deployment 1234:8080`. You can now navigate to `localhost:1234` in a browser and it will take you to the webserver for the instance you port-forwarded to.
+
+###### Updating Airflow
+
+* Bump the version in the `airflow_image/Dockerfile`, the line looks like `ARG AIRFLOW_VERSION=<version_number>`
+* Delete and recreate the deployment.
+* `exec` into one of the containers in the pod and run `airflow upgradedb`
 
 ###### View Resources
 * `kubectl get all`. This will display any pods, deployments, replicasets, etc.
