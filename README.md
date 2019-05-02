@@ -44,7 +44,18 @@ The `default` instance logs are stored in `gs://gitlab-airflow/prod`, the `testi
 * The resource manifests for kubernetes live in `airflow-image/manifests/`. To create or update these resources in kubernetes first run `kubectl delete deployment airflow-deployment` and then run `kubectl apply -f <manifest-file.yaml>`. Because we are using a persistent volume that can only be claimed by one pod at a time we can't use the the usual `kubectl apply -f` for modifications. A fresh deployment must be set up each time.
 
 ###### Access Shell with Pod
+
 -  To get into a shell that exists in a kube pod, use the command `kubectl exec -ti <pod-name> -c <container-name> /bin/bash`. This will drop you into a shell within the pod and container that you chose. This can be useful if you want to run airflow commands directly within a shell instead of trying to do it through the webserver UI.
+  
+    - `kubectl exec -ti airflow-deployment-56658758-ssswj -c scheduler /bin/bash` Is an example command to access that pod and the container named `scheduler`. The container names are listed in `airflow_image/manifests/deployment.yaml`. This information is also available if you do `kubectl describe <pod>` thought it is harder to read.
+      - Additional tip: there is no need to specify a resource type as a separate argument when passing arguments in resource/name form (e.g. 'kubectl get resource/<resource_name>' instead of 'kubectl get resource resource/<resource_name>'
+
+- Things you might do once you're in a shell:
+
+  - Trigger a specfic task in a dag: 
+    - Template: `airflow run <dag> <task_name> <execution_date> -f -A` 
+    - Specific example: `airflow run dbt dbt-full-refresh 05-02T15:52:00+00:00  -f -A`
+    - The `-f` flag forces it to rerun even if there was already a success or failure for that task_run, the `-A` flag forces it to ignore dependencies (aka doesn’t care that it wasn’t branched to upstream)
 
 ###### Updating Secrets
 -  The easiest way to update secrets is to use the command `kubectl edit secret airflow -o yaml`, this will open the secret in a text editor and you can edit it from there. New secrets must be base64 encoded, the easiest way to do this is to use `echo -n <secret> | base64 -`. There are some `null` values in the secret file when you edit it, for the file to save successfully you must change the `null` values to `""`, otherwise it won't save properly.
