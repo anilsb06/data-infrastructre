@@ -177,7 +177,7 @@ spec:
         image: registry.gitlab.com/gitlab-data/data-image/airflow-image:latest
         command: ["/bin/sh", "-c"]
         args: ["gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials && \
-                gcloud container clusters get-credentials airflow --zone us-central1-a --project gitlab-analysis"]
+                gcloud container clusters get-credentials airflow --region us-west1-a --project gitlab-analysis"]
         volumeMounts:
           - name: airflow-secrets
             mountPath: /secrets/cloudsql/
