@@ -14,7 +14,7 @@ The `default` instance logs are stored in `gs://gitlab-airflow/prod`, the `testi
 
 1. [Install Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-with-homebrew-on-macos)
 
-2.  Connect it to the data team cluster by running -> `gcloud container clusters get-credentials airflow --zone us-central1-a --project gitlab-analysis`
+2.  Connect it to the data team cluster by running -> `gcloud container clusters get-credentials airflow --zone us-west1-a --project gitlab-analysis`
 
 3.  Run `kubectl get pods` and make sure it returns successfully 
 
