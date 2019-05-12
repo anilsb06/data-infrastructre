@@ -6,6 +6,8 @@ stages:
 variables:
   DOCKER_DRIVE: overlay2
 
+
+
 ### Job Templates
 
 .docker_build: &docker_build
@@ -17,7 +19,10 @@ variables:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
   except:
-    - master
+    changes:
+      - "*.md"
+  only:
+    - branches
 
 .docker_publish: &docker_publish
   stage: build
@@ -30,6 +35,9 @@ variables:
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest
   only:
     - master
+  except:
+    changes:
+      - "*.md"
 
 ### Jobs
 
