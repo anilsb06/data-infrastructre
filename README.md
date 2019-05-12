@@ -18,14 +18,14 @@ The `default` instance logs are stored in `gs://gitlab-airflow/prod`, the `testi
 
 3.  Run `kubectl get pods` and make sure it returns successfully 
 
-4. * ALL OF YOUR COMMANDS TOUCH PRODUCTION, THERE IS CURRENTLY NO TESTING ENVIRONMENT IN K8S*. The canonical way to test is to use the local docker-compose setup.
+4. *ALL OF YOUR COMMANDS TOUCH PRODUCTION, THERE IS CURRENTLY NO TESTING ENVIRONMENT IN K8S*. The canonical way to test is to use the local docker-compose setup.
 
 4. (Optional) Use the `kubectl port-forward` command to connect to the webserver by running `kubectl port-forward deployment/airflow-deployment 1234:8080` and open your browser to `localhost:1234` 
 
 ##### Common Airflow and Kubernetes Tasks
 
 ###### Tips
-*  We recommended aliasing `kubectl` as `kbc`
+*  We recommend aliasing `kubectl` as `kbc`
 *  The secret manifest file is in 1password in the Data Team Vault as `default_secrets.yaml`.
 
 ###### Access Airflow Webserver UI
