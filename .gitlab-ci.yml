@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - delete
 
 ### Global Vars
 variables:
@@ -10,66 +11,99 @@ variables:
 
 ### Job Templates
 
-.docker_build: &docker_build
+.docker_base: &docker_base
   stage: build
   image: docker:latest
   services:
     - docker:dind
-  script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
-    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
   except:
     changes:
       - "*.md"
-  only:
-    - branches
 
-.docker_publish: &docker_publish
-  stage: build
-  image: docker:latest
-  services:
-    - docker:dind
+.prod_docker_publish: &prod_docker_publish
+  <<: *docker_base
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest .
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest
-  only:
-    - master
-  except:
-    changes:
-      - "*.md"
+
+.mr_docker_publish: &mr_docker_publish
+  <<: *docker_base
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
+    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
+
+# .mr_delete: &mr_delete
+#   stage: delete
+#   image: docker:latest
+#   services:
+#     - docker:dind
+#   script:
+#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+#     - docker rmi $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
+#   except:
+#     changes:
+#       - "*.md"
+#   only:
+#     refs:
+#       - branches
+#   when: manual
 
 ### Jobs
 
 # Data Image
-data_build:
-  <<: *docker_build
+mr_data_build:
+  <<: *mr_docker_publish
   variables:
     IMAGE_NAME: data-image
   before_script:
     - cd data_image
+  only:
+    refs:
+      - branches
 
-data_publish:
-  <<: *docker_publish
+# mr_data_delete:
+#   <<: *mr_delete
+#   variables:
+#     IMAGE_NAME: data-image
+#   before_script:
+#     - cd data_image
+
+prod_data_publish:
+  <<: *prod_docker_publish
   variables:
     IMAGE_NAME: data-image
   before_script:
     - cd data_image
+  only:
+    refs:
+      - master
+
 
 # Airflow Image
-airflow_build:
-  <<: *docker_build
+mr_airflow_build:
+  <<: *mr_docker_publish
   variables:
     IMAGE_NAME: airflow-image
   before_script:
     - cd airflow_image
 
-airflow_publish:
-  <<: *docker_publish
+# mr_airflow_delete:
+#   <<: *mr_delete
+#   variables:
+#     IMAGE_NAME: airflow-image
+#   before_script:
+#     - cd data_image
+
+prod_airflow_publish:
+  <<: *prod_docker_publish
   variables:
     IMAGE_NAME: airflow-image
   before_script:
     - cd airflow_image
+  only:
+    refs:
+      - master
 
 # Airflow Deployment
