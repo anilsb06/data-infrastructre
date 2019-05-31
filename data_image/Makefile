@@ -8,4 +8,4 @@ build:
 
 run: build
 	@echo "Building image and opening shell..."
-	@docker build -t ${IMAGE} . && docker run -i -t ${IMAGE} /bin/bash
+	@docker run -i -t ${IMAGE} /bin/bash
