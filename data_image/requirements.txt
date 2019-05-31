@@ -12,6 +12,7 @@ gspread_dataframe==3.0.2
 henry==0.1.1
 idna==2.7
 ipwhois
+ipython
 keyrings.alt
 lxml
 numpy==1.15.2

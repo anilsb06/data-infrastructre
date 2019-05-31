@@ -14,3 +14,11 @@ ENV CLOUD_SDK_REPO="cloud-sdk-stretch"
 RUN echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 RUN apt-get update && apt-get install -y google-cloud-sdk
+
+# Install dbt completion script
+RUN curl https://raw.githubusercontent.com/fishtown-analytics/dbt-completion.bash/master/dbt-completion.bash > ~/.dbt-completion.bash
+RUN /bin/bash -c "source ~/.dbt-completion.bash"
+RUN echo 'source ~/.dbt-completion.bash' >> ~/.bash_profile
+
+# Install VIM
+RUN apt-get install -y vim
