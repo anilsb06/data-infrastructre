@@ -1,0 +1,3 @@
+[Snowflake]
+Description = ODBC for Snowflake
+Driver = usr/lib64/snowflake/odbc/lib/libSnowflake.so
