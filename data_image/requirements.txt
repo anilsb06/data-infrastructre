@@ -22,7 +22,8 @@ pandas==0.23.4
 psycopg2-binary==2.7.5
 pyasn1-modules
 PyBambooHR==0.7.1
-pytest
+pylint==2.3
+pytest==5.0.0
 python-dateutil==2.7.3
 pytz==2018.5
 PyYAML==3.13
@@ -36,4 +37,5 @@ target-stitch==1.8.1
 tldextract
 toolz
 urllib3==1.23
+xenon==0.5.5
 zeep
