@@ -106,4 +106,30 @@ prod_airflow_publish:
     refs:
       - master
 
-# Airflow Deployment
+# dbt Image
+mr_dbt_build:
+  <<: *mr_docker_publish
+  variables:
+    IMAGE_NAME: dbt-image
+  before_script:
+    - cd dbt_image
+  only:
+    refs:
+      - branches
+
+# mr_data_delete:
+#   <<: *mr_delete
+#   variables:
+#     IMAGE_NAME: data-image
+#   before_script:
+#     - cd data_image
+
+prod_dbt_publish:
+  <<: *prod_docker_publish
+  variables:
+    IMAGE_NAME: dbt-image
+  before_script:
+    - cd dbt_image
+  only:
+    refs:
+      - master
