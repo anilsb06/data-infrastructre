@@ -21,6 +21,7 @@ variables:
       - "*.md"
   tags:
     - housekeeping
+    - docker
 
 .prod_docker_publish: &prod_docker_publish
   <<: *docker_base
@@ -30,6 +31,7 @@ variables:
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest
   tags:
     - housekeeping
+    - docker
 
 .mr_docker_publish: &mr_docker_publish
   <<: *docker_base
@@ -39,6 +41,7 @@ variables:
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
   tags:
     - housekeeping
+    - docker
 
 # .mr_delete: &mr_delete
 #   stage: delete
