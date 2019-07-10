@@ -81,8 +81,6 @@ prod_data_publish:
   only:
     refs:
       - master
-    changes:
-      - data_image/*
 
 # Airflow Image
 mr_airflow_build:
@@ -113,8 +111,6 @@ prod_airflow_publish:
   only:
     refs:
       - master
-    changes:
-      - airflow_image/*
 
 # dbt Image
 mr_dbt_build:
@@ -145,5 +141,3 @@ prod_dbt_publish:
   only:
     refs:
       - master
-    changes:
-      - dbt_image/*
