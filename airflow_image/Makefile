@@ -1,6 +1,13 @@
 .PHONY: build
 
 IMAGE := airflow-image:test
+WEBSERVER := airflow_image_webserver_1
+
+attach: build
+	@echo "Spinning up Airflow and attaching..."
+	@docker-compose up -d
+	@sleep 10
+	@docker exec -ti ${WEBSERVER} /bin/bash
 
 build:
 	@echo "Building image..."
