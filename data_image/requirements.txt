@@ -17,7 +17,7 @@ keyrings.alt
 lxml
 numpy==1.15.2
 oauth2client
-pandas==0.23.4
+pandas==0.24.2
 psycopg2-binary==2.7.5
 pyasn1-modules
 PyBambooHR==0.7.1
