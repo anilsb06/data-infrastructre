@@ -16,9 +16,6 @@ variables:
   image: docker:latest
   services:
     - docker:dind
-  except:
-    changes:
-      - "*.md"
 
 .prod_docker_publish: &prod_docker_publish
   <<: *docker_base
@@ -65,6 +62,9 @@ mr_data_build:
       - branches
     changes:
       - data_image/*
+  except:
+    changes:
+      - "*.md"
 
 # mr_data_delete:
 #   <<: *mr_delete
@@ -97,6 +97,9 @@ mr_airflow_build:
       - branches
     changes:
       - airflow_image/*
+  except:
+    changes:
+      - "*.md"
 
 # mr_airflow_delete:
 #   <<: *mr_delete
@@ -127,6 +130,9 @@ mr_dbt_build:
       - branches
     changes:
       - dbt_image/*
+  except:
+    changes:
+      - "*.md"
 
 # mr_data_delete:
 #   <<: *mr_delete
