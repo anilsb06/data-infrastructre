@@ -81,9 +81,9 @@ prod_data_publish:
     - cd data_image
   only:
     refs:
-    - master
-    - triggers
-    - web
+      - master
+      - triggers
+      - web
 
 # Airflow Image
 mr_airflow_build:
@@ -117,6 +117,10 @@ prod_airflow_publish:
   only:
     refs:
       - master
+  except:
+    refs:
+      - triggers
+      - web
 
 # dbt Image
 mr_dbt_build:
@@ -150,3 +154,7 @@ prod_dbt_publish:
   only:
     refs:
       - master
+  except:
+    refs:
+      - triggers
+      - web
