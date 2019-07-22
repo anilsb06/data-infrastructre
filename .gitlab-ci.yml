@@ -90,8 +90,8 @@ trigger_prod_data_publish:
   before_script:
     - cd data_image
   only:
-    variables:
-    - $TRIGGERED
+    - triggers
+    - schedules
 
 # Airflow Image
 mr_airflow_build:
