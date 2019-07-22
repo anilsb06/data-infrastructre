@@ -81,17 +81,9 @@ prod_data_publish:
     - cd data_image
   only:
     refs:
-      - master
-
-trigger_prod_data_publish:
-  <<: *prod_docker_publish
-  variables:
-    IMAGE_NAME: data-image
-  before_script:
-    - cd data_image
-  only:
+    - master
     - triggers
-    - schedules
+    - web
 
 # Airflow Image
 mr_airflow_build:
