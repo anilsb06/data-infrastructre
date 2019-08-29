@@ -114,15 +114,14 @@ To install a release
 
 `helm install --namespace <namespace> --name <release_name> -f values.yaml <chart_name>`
 
-Example for updating the group token 
+Example for updating the runner version or group token 
 
 ```bash
 gcloud components update
 helm get values gitlab-runner
 helm init
-helm get values gitlab-data
-touch values.yml
-<save values to values.yml>
+helm get values gitlab-data > values.yml
+nano values.yml # Update values
 helm list
 helm del --purge gitlab-data
 helm install --namespace gitlab-data --name gitlab-data -f values.yaml gitlab/gitlab-runner
