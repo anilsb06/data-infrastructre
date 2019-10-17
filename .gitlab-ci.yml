@@ -58,7 +58,7 @@ mr_data_build:
     - cd data_image
   only:
     refs:
-      - branches
+      - merge_requests
     changes:
       - data_image/*
   except:
