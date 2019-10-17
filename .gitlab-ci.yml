@@ -30,7 +30,6 @@ variables:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
-  tags:
 
 # .mr_delete: &mr_delete
 #   stage: delete
@@ -59,7 +58,7 @@ mr_data_build:
     - cd data_image
   only:
     refs:
-      - branches
+      - merge_requests
     changes:
       - data_image/*
   except:
