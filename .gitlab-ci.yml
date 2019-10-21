@@ -47,6 +47,7 @@ variables:
   only:
     refs:
       - merge_requests
+  when: manual
 
 
 # ======
@@ -77,6 +78,7 @@ mr_data_delete:
     action: stop
   variables:
     IMAGE_NAME: data-image
+    GIT_STRATEGY: none
   before_script:
     - cd data_image
 
@@ -121,6 +123,7 @@ mr_airflow_delete:
     action: stop
   variables:
     IMAGE_NAME: airflow-image
+    GIT_STRATEGY: none
   before_script:
     - cd data_image
 
@@ -167,6 +170,7 @@ mr_dbt_delete:
     action: stop
   variables:
     IMAGE_NAME: dbt-image
+    GIT_STRATEGY: none
   before_script:
     - cd dbt_image
 
