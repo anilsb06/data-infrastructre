@@ -46,8 +46,7 @@ variables:
       - "*.md"
   only:
     refs:
-      - branches
-  when: manual
+      - merge_requests
 
 
 # ======
