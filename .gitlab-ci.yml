@@ -152,15 +152,15 @@ mr_dbt_build:
     changes:
       - "*.md"
 
-mr_data_delete:
+mr_dbt_delete:
   <<: *mr_delete
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
   variables:
-    IMAGE_NAME: data-image
+    IMAGE_NAME: dbt-image
   before_script:
-    - cd data_image
+    - cd dbt_image
 
 prod_dbt_publish:
   <<: *prod_docker_publish
