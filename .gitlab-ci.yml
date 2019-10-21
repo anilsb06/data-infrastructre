@@ -9,7 +9,9 @@ variables:
 
 
 
-### Job Templates
+# ======
+# Templates
+# ======
 
 .docker_base: &docker_base
   stage: build
@@ -47,9 +49,10 @@ variables:
       - branches
   when: manual
 
-### Jobs
 
+# ======
 # Data Image
+# ======
 mr_data_build:
   <<: *mr_docker_publish
   environment:
@@ -90,7 +93,10 @@ prod_data_publish:
       - triggers
       - web
 
+
+# ======
 # Airflow Image
+# ======
 mr_airflow_build:
   <<: *mr_docker_publish
   environment:
@@ -102,7 +108,7 @@ mr_airflow_build:
     - cd airflow_image
   only:
     refs:
-      - branches
+      - merge_requests
     changes:
       - airflow_image/*
   except:
@@ -133,7 +139,10 @@ prod_airflow_publish:
       - triggers
       - web
 
+
+# ======
 # dbt Image
+# ======
 mr_dbt_build:
   <<: *mr_docker_publish
   environment:
@@ -145,7 +154,7 @@ mr_dbt_build:
     - cd dbt_image
   only:
     refs:
-      - branches
+      - merge_requests
     changes:
       - dbt_image/*
   except:
