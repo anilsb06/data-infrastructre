@@ -33,26 +33,11 @@ variables:
     - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
 
-.mr_delete: &mr_delete
-  stage: delete
-  image: docker:latest
-  services:
-    - docker:dind
-  script:
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker images | grep $CI_COMMIT_REF_NAME | awk '{print $1 ":" $2}' | xargs docker rmi
-  except:
-    changes:
-      - "*.md"
-  only:
-    refs:
-      - merge_requests
-  when: manual
-
 
 # ======
 # Data Image
 # ======
+
 mr_data_build:
   <<: *mr_docker_publish
   environment:
@@ -87,6 +72,7 @@ prod_data_publish:
 # ======
 # Airflow Image
 # ======
+
 mr_airflow_build:
   <<: *mr_docker_publish
   environment:
@@ -123,6 +109,7 @@ prod_airflow_publish:
 # ======
 # dbt Image
 # ======
+
 mr_dbt_build:
   <<: *mr_docker_publish
   environment:
@@ -155,13 +142,31 @@ prod_dbt_publish:
       - triggers
       - web
 
+
 # ======
 # Delete Images
 # ======
+
 mr_image_delete:
-  <<: *mr_delete
+  stage: delete
+  image: docker:latest
+  services:
+    - docker:dind
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
   variables:
     GIT_STRATEGY: none
+  before_script:
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
+    - wget -O /usr/bin/reg https://github.com/genuinetools/reg/releases/download/v0.13.0/reg-linux-amd64
+    - chmod +x /usr/bin/reg
+  script:
+    - reg --registry $CI_REGISTRY rm $CI_PROJECT_PATH/builder/ci:$CI_PIPELINE_ID
+  except:
+    changes:
+      - "*.md"
+  only:
+    refs:
+      - merge_requests
+  when: manual
