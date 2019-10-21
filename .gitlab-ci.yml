@@ -9,7 +9,9 @@ variables:
 
 
 
-### Job Templates
+# ======
+# Templates
+# ======
 
 .docker_base: &docker_base
   stage: build
@@ -31,27 +33,31 @@ variables:
     - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
 
-# .mr_delete: &mr_delete
-#   stage: delete
-#   image: docker:latest
-#   services:
-#     - docker:dind
-#   script:
-#     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-#     - docker rmi $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
-#   except:
-#     changes:
-#       - "*.md"
-#   only:
-#     refs:
-#       - branches
-#   when: manual
+.mr_delete: &mr_delete
+  stage: delete
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker rmi $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
+  except:
+    changes:
+      - "*.md"
+  only:
+    refs:
+      - merge_requests
+  when: manual
 
-### Jobs
 
+# ======
 # Data Image
+# ======
 mr_data_build:
   <<: *mr_docker_publish
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    on_stop: mr_data_delete
   variables:
     IMAGE_NAME: data-image
   before_script:
@@ -65,12 +71,16 @@ mr_data_build:
     changes:
       - "*.md"
 
-# mr_data_delete:
-#   <<: *mr_delete
-#   variables:
-#     IMAGE_NAME: data-image
-#   before_script:
-#     - cd data_image
+mr_data_delete:
+  <<: *mr_delete
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  variables:
+    IMAGE_NAME: data-image
+    GIT_STRATEGY: none
+  before_script:
+    - cd data_image
 
 prod_data_publish:
   <<: *prod_docker_publish
@@ -84,28 +94,38 @@ prod_data_publish:
       - triggers
       - web
 
+
+# ======
 # Airflow Image
+# ======
 mr_airflow_build:
   <<: *mr_docker_publish
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    on_stop: mr_airflow_delete
   variables:
     IMAGE_NAME: airflow-image
   before_script:
     - cd airflow_image
   only:
     refs:
-      - branches
+      - merge_requests
     changes:
       - airflow_image/*
   except:
     changes:
       - "*.md"
 
-# mr_airflow_delete:
-#   <<: *mr_delete
-#   variables:
-#     IMAGE_NAME: airflow-image
-#   before_script:
-#     - cd data_image
+mr_airflow_delete:
+  <<: *mr_delete
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  variables:
+    IMAGE_NAME: airflow-image
+    GIT_STRATEGY: none
+  before_script:
+    - cd data_image
 
 prod_airflow_publish:
   <<: *prod_docker_publish
@@ -121,28 +141,38 @@ prod_airflow_publish:
       - triggers
       - web
 
+
+# ======
 # dbt Image
+# ======
 mr_dbt_build:
   <<: *mr_docker_publish
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    on_stop: mr_dbt_delete
   variables:
     IMAGE_NAME: dbt-image
   before_script:
     - cd dbt_image
   only:
     refs:
-      - branches
+      - merge_requests
     changes:
       - dbt_image/*
   except:
     changes:
       - "*.md"
 
-# mr_data_delete:
-#   <<: *mr_delete
-#   variables:
-#     IMAGE_NAME: data-image
-#   before_script:
-#     - cd data_image
+mr_dbt_delete:
+  <<: *mr_delete
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  variables:
+    IMAGE_NAME: dbt-image
+    GIT_STRATEGY: none
+  before_script:
+    - cd dbt_image
 
 prod_dbt_publish:
   <<: *prod_docker_publish
