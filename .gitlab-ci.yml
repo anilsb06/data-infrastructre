@@ -158,7 +158,7 @@ prod_dbt_publish:
 # ======
 # Delete Images
 # ======
-mr_data_delete:
+mr_image_delete:
   <<: *mr_delete
   environment:
     name: review/$CI_COMMIT_REF_NAME
