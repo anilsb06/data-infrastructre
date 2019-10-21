@@ -158,13 +158,12 @@ mr_image_delete:
   variables:
     GIT_STRATEGY: none
   before_script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     - wget -O /usr/bin/reg https://github.com/genuinetools/reg/releases/download/v0.13.0/reg-linux-amd64
     - chmod +x /usr/bin/reg
   script:
-    - reg --registry $CI_REGISTRY rm $CI_REGISTRY_IMAGE/airflow_image:$CI_COMMIT_REF_NAME || true
-    - reg --registry $CI_REGISTRY rm $CI_REGISTRY_IMAGE/data_image:$CI_COMMIT_REF_NAME || true
-    - reg --registry $CI_REGISTRY rm $CI_REGISTRY_IMAGE/dbt_image:$CI_COMMIT_REF_NAME || true
+    - reg -r $CI_REGISTRY -u gitlab-ci-token -p $CI_BUILD_TOKEN rm $CI_REGISTRY_IMAGE/airflow_image:$CI_COMMIT_REF_NAME || true
+    - reg -r $CI_REGISTRY -u gitlab-ci-token -p $CI_BUILD_TOKEN rm $CI_REGISTRY_IMAGE/data_image:$CI_COMMIT_REF_NAME || true
+    - reg -r $CI_REGISTRY -u gitlab-ci-token -p $CI_BUILD_TOKEN rm $CI_REGISTRY_IMAGE/dbt_image:$CI_COMMIT_REF_NAME || true
   except:
     changes:
       - "*.md"
