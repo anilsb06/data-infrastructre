@@ -40,7 +40,7 @@ variables:
     - docker:dind
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker rmi $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
+    - docker images | grep $CI_COMMIT_REF_NAME | awk '{print $1 ":" $2}' | xargs docker rmi
   except:
     changes:
       - "*.md"
@@ -57,7 +57,7 @@ mr_data_build:
   <<: *mr_docker_publish
   environment:
     name: review/$CI_COMMIT_REF_NAME
-    on_stop: mr_data_delete
+    on_stop: mr_image_delete
   variables:
     IMAGE_NAME: data-image
   before_script:
@@ -70,17 +70,6 @@ mr_data_build:
   except:
     changes:
       - "*.md"
-
-mr_data_delete:
-  <<: *mr_delete
-  environment:
-    name: review/$CI_COMMIT_REF_NAME
-    action: stop
-  variables:
-    IMAGE_NAME: data-image
-    GIT_STRATEGY: none
-  before_script:
-    - cd data_image
 
 prod_data_publish:
   <<: *prod_docker_publish
@@ -102,7 +91,7 @@ mr_airflow_build:
   <<: *mr_docker_publish
   environment:
     name: review/$CI_COMMIT_REF_NAME
-    on_stop: mr_airflow_delete
+    on_stop: mr_image_delete
   variables:
     IMAGE_NAME: airflow-image
   before_script:
@@ -115,17 +104,6 @@ mr_airflow_build:
   except:
     changes:
       - "*.md"
-
-mr_airflow_delete:
-  <<: *mr_delete
-  environment:
-    name: review/$CI_COMMIT_REF_NAME
-    action: stop
-  variables:
-    IMAGE_NAME: airflow-image
-    GIT_STRATEGY: none
-  before_script:
-    - cd data_image
 
 prod_airflow_publish:
   <<: *prod_docker_publish
@@ -149,7 +127,7 @@ mr_dbt_build:
   <<: *mr_docker_publish
   environment:
     name: review/$CI_COMMIT_REF_NAME
-    on_stop: mr_dbt_delete
+    on_stop: mr_image_delete
   variables:
     IMAGE_NAME: dbt-image
   before_script:
@@ -162,17 +140,6 @@ mr_dbt_build:
   except:
     changes:
       - "*.md"
-
-mr_dbt_delete:
-  <<: *mr_delete
-  environment:
-    name: review/$CI_COMMIT_REF_NAME
-    action: stop
-  variables:
-    IMAGE_NAME: dbt-image
-    GIT_STRATEGY: none
-  before_script:
-    - cd dbt_image
 
 prod_dbt_publish:
   <<: *prod_docker_publish
@@ -187,3 +154,14 @@ prod_dbt_publish:
     refs:
       - triggers
       - web
+
+# ======
+# Delete Images
+# ======
+mr_data_delete:
+  <<: *mr_delete
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    action: stop
+  variables:
+    GIT_STRATEGY: none
