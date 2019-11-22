@@ -15,6 +15,7 @@ ipwhois
 ipython
 keyrings.alt
 lxml
+meltano==1.1.0
 numpy==1.15.2
 oauth2client
 pandas==0.24.2
