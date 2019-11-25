@@ -1,4 +1,1 @@
-dbt==0.15.0rc2
-azure-storage-blob~=2.1
-azure-storage-common~=2.1
-urllib3<1.25
+dbt==0.15.0
