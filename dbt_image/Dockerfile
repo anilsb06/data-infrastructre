@@ -1,4 +1,4 @@
-From python:3.7
+From python:3.8
 
 # Copy in required files
 COPY requirements.txt ./
