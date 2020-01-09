@@ -24,8 +24,8 @@ pyasn1-modules
 PyBambooHR==0.7.1
 pylint==2.3
 pytest==5.0.0
-python-dateutil==2.7.3
-pytz==2018.5
+python-dateutil<=2.8.1
+pytz<=2019.3
 PyYAML==5.1
 remarshal==0.10.0
 requests==2.20
@@ -33,7 +33,7 @@ salesforce-bulk
 simple-salesforce
 singer-python==5.0.15
 six==1.12.0
-snowflake-sqlalchemy==1.1.10
+snowflake-sqlalchemy==1.1.18
 target-stitch==1.8.1
 tldextract
 toolz
