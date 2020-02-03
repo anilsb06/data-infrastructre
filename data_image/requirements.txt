@@ -37,7 +37,7 @@ snowflake-sqlalchemy==1.1.18
 target-stitch==1.8.1
 tldextract
 toolz
-urllib3<1.25
+urllib3==1.23
 xenon==0.7
 zeep
 azure-storage-blob~=2.1
