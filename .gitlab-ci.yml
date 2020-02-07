@@ -8,7 +8,6 @@ variables:
   DOCKER_DRIVE: overlay2
 
 
-
 # ======
 # Templates
 # ======
