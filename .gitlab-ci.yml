@@ -143,6 +143,42 @@ prod_dbt_publish:
 
 
 # ======
+# Meltano Image
+# ======
+
+mr_meltano_build:
+  <<: *mr_docker_publish
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    on_stop: mr_image_delete
+  variables:
+    IMAGE_NAME: dbt-image
+  before_script:
+    - cd meltano_image
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - meltano_image/*
+  except:
+    changes:
+      - "*.md"
+
+prod_meltano_publish:
+  <<: *prod_docker_publish
+  variables:
+    IMAGE_NAME: dbt-image
+  before_script:
+    - cd meltano_image
+  only:
+    refs:
+      - master
+  except:
+    refs:
+      - triggers
+      - web
+
+# ======
 # Delete Images
 # ======
 
