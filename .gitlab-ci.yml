@@ -152,7 +152,7 @@ mr_meltano_build:
     name: review/$CI_COMMIT_REF_NAME
     on_stop: mr_image_delete
   variables:
-    IMAGE_NAME: dbt-image
+    IMAGE_NAME: meltano-image
   before_script:
     - cd meltano_image
   only:
@@ -167,7 +167,7 @@ mr_meltano_build:
 prod_meltano_publish:
   <<: *prod_docker_publish
   variables:
-    IMAGE_NAME: dbt-image
+    IMAGE_NAME: meltano-image
   before_script:
     - cd meltano_image
   only:
