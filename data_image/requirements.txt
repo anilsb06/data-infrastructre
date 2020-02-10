@@ -28,7 +28,7 @@ python-dateutil<=2.8.1
 pytz<=2019.3
 PyYAML==5.1
 remarshal==0.10.0
-requests==2.22
+requests==2.20
 salesforce-bulk
 simple-salesforce
 singer-python==5.0.15
@@ -37,6 +37,6 @@ snowflake-sqlalchemy==1.2.0
 target-stitch==1.8.1
 tldextract
 toolz
-urllib3==1.25.2
+urllib3==1.23
 xenon==0.7
 zeep
