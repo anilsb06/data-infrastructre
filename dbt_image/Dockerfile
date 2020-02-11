@@ -24,3 +24,7 @@ ENV DBT_PROFILES_DIR=/analytics/transform/snowflake-dbt/profile/
 COPY dbt_functions.sh ./
 RUN cat dbt_functions.sh >> ~/.bashrc
 RUN echo 'export -f dbt_run_changed' >> ~/.bashrc
+
+## Add refresh command
+RUN echo 'alias dbt_refresh ="dbt clean ; dbt deps ; dbt seed' >> ~/.bashrc
+alias dbt!="source ~/.venv/dbt/bin/activate"
