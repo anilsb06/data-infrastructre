@@ -26,4 +26,4 @@ RUN cat dbt_functions.sh >> ~/.bashrc
 RUN echo 'export -f dbt_run_changed' >> ~/.bashrc
 
 ## Add refresh command
-RUN echo 'alias dbt_refresh ="dbt clean ; dbt deps ; dbt seed' >> ~/.bashrc
+RUN echo 'alias dbt_refresh ="dbt clean ; dbt deps ; dbt seed"' >> ~/.bashrc
