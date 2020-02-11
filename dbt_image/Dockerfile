@@ -27,4 +27,3 @@ RUN echo 'export -f dbt_run_changed' >> ~/.bashrc
 
 ## Add refresh command
 RUN echo 'alias dbt_refresh ="dbt clean ; dbt deps ; dbt seed' >> ~/.bashrc
-alias dbt!="source ~/.venv/dbt/bin/activate"
