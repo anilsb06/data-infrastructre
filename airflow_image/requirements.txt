@@ -18,5 +18,5 @@ urllib3==1.24.2
 azure-storage-blob~=2.1
 azure-storage-common~=2.1
 werkzeug==0.16.0
-airflow-prometheus-exporter
+airflow-prometheus-exporter==1.0.7
 
