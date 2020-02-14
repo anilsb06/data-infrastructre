@@ -6,6 +6,10 @@ ARG AIRFLOW_HOME=/usr/local/airflow
 ARG AIRFLOW_DEPS="crypto,gcp_api,google_auth,kubernetes,password,slack"
 ENV AIRFLOW_GPL_UNIDECODE yes
 
+ENV AIRFLOW_HOME=${AIRFLOW_HOME}
+
+COPY prometheus_config.yml "${AIRFLOW_HOME}/prometheus_config.yml"
+
 # Kubectl Installation
 ARG K8S_VERSION=v1.11.5
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$K8S_VERSION/bin/linux/amd64/kubectl
@@ -16,6 +20,7 @@ RUN mv ./kubectl /usr/local/bin/kubectl
 RUN pip install -U pip
 RUN pip install apache-airflow[${AIRFLOW_DEPS}]==${AIRFLOW_VERSION}
 COPY airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
+
 
 # Python Deps
 COPY requirements.txt .
@@ -38,5 +43,4 @@ RUN chmod 777 -R ${AIRFLOW_HOME}/repo_watcher.py
 # Env Config
 EXPOSE 8080
 ENV PATH "${AIRFLOW_HOME}:${PATH}"
-ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 WORKDIR ${AIRFLOW_HOME}
