@@ -10,7 +10,7 @@ pandas==0.23.4
 psycopg2-binary==2.7.5
 python-dateutil==2.7.3
 pytz==2018.5
-PyYAML==3.13
+PyYAML==5.1
 requests==2.20.0
 six==1.13.0
 slackclient>=1.0.0,<2.0.0
@@ -18,5 +18,4 @@ urllib3==1.24.2
 azure-storage-blob~=2.1
 azure-storage-common~=2.1
 werkzeug==0.16.0
-airflow-prometheus-exporter==1.0.7
-
+git+https://gitlab.com/gitlab-data/airflow-prometheus-exporter.git@v1.0.7b#egg=airflow-prometheus-exporter

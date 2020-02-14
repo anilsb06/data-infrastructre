@@ -1,0 +1,20 @@
+xcom_params:
+
+  -
+    task_id: bamboohr-extract
+    key: id_employee_number_mapping
+  -
+    task_id: bamboohr-extract
+    key: custombonus
+  -
+    task_id: bamboohr-extract
+    key: employmentstatus
+  -
+    task_id: bamboohr-extract
+    key: jobinfo
+  -
+    task_id: bamboohr-extract
+    key: compensation
+  -
+    task_id: bamboohr-extract
+    key: directory
