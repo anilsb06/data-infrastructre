@@ -34,6 +34,7 @@ salesforce-bulk
 simple-salesforce
 singer-python==5.0.15
 six==1.12.0
+slackclient==2.5.0
 snowflake-connector-python<2.2.0
 snowflake-sqlalchemy==1.2.0
 target-stitch==1.8.1
