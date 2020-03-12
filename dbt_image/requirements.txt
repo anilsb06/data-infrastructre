@@ -1,2 +1,2 @@
 dbt==0.15.2
-git+https://gitlab.com/gitlab-data/gitlab-data-utils.git@v0.0.2#egg=gitlabdata
+git+https://gitlab.com/gitlab-data/gitlab-data-utils.git@v0.0.3#egg=gitlabdata
