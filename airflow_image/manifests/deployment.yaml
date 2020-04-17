@@ -77,6 +77,10 @@ spec:
             mountPath: /usr/local/airflow/logs
           - name: kube-config
             mountPath: /root/.kube/
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials"]
         command: ["airflow"]
         args: ["scheduler"]
 
