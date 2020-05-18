@@ -4,7 +4,7 @@ chardet==3.0.4
 clearbit
 configparser
 fire==0.1.3
-gitlabdata==0.1.0
+gitlabdata==0.2.0
 google-cloud-storage
 google-auth
 gspread==3.1.0
