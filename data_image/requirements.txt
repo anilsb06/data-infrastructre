@@ -39,7 +39,7 @@ requests==2.20
 salesforce-bulk==2.1.0
 simple-salesforce==1.1.0
 singer-python==5.0.15
-six==1.13.0
+six==1.12.0
 slackclient==2.5.0
 snowflake-connector-python<2.2.0
 snowflake-sqlalchemy==1.2.0
