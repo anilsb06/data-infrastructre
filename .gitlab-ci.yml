@@ -23,8 +23,8 @@ variables:
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest .
-    - docker tag "$CI_REGISTRY_IMAGE/$IMAGE_NAME":latest "$CI_REGISTRY_IMAGE/$IMAGE_NAME":"$CI_COMMIT_TAG"
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest
+    - docker tag $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG
 
 .mr_docker_publish: &mr_docker_publish
