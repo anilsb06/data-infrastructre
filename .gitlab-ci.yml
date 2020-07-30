@@ -20,6 +20,11 @@ variables:
 
 .prod_docker_publish: &prod_docker_publish
   <<: *docker_base
+  only:
+    refs:
+      - tags@gitlab-data/data-image
+    variables:
+      - $CI_COMMIT_TAG =~ /^v*/
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
