@@ -20,13 +20,13 @@ variables:
 
 .prod_docker_publish: &prod_docker_publish
   <<: *docker_base
-  variables:
-    SOURCE_IMAGE: $CI_REGISTRY_IMAGE/$IMAGE_NAME
   script:
     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest .
+    - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME .
+    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME
+    - docker tag $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest
+    - docker tag $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_REF_NAME $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest
-    - docker tag $SOURCE_IMAGE:latest $IMAGE_NAME:$CI_COMMIT_TAG
     - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_TAG
 
 .mr_docker_publish: &mr_docker_publish
