@@ -70,11 +70,6 @@ prod_data_publish:
     IMAGE_NAME: data-image
   before_script:
     - cd data_image
-  only:
-    refs:
-      - master
-      - triggers
-      - web
 
 
 # ======
@@ -105,13 +100,6 @@ prod_airflow_publish:
     IMAGE_NAME: airflow-image
   before_script:
     - cd airflow_image
-  only:
-    refs:
-      - master
-  except:
-    refs:
-      - triggers
-      - web
 
 
 # ======
@@ -142,13 +130,6 @@ prod_dbt_publish:
     IMAGE_NAME: dbt-image
   before_script:
     - cd dbt_image
-  only:
-    refs:
-      - master
-  except:
-    refs:
-      - triggers
-      - web
 
 
 # ======
