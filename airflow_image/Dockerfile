@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM python:3.8
 
 # Airflow Config
 ARG AIRFLOW_VERSION=1.10.12
@@ -11,7 +11,7 @@ ENV AIRFLOW_HOME=${AIRFLOW_HOME}
 COPY prometheus_config.yml "${AIRFLOW_HOME}/prometheus_config.yml"
 
 # Kubectl Installation
-ARG K8S_VERSION=v1.15.7
+ARG K8S_VERSION=v1.16.13
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$K8S_VERSION/bin/linux/amd64/kubectl
 RUN chmod +x ./kubectl
 RUN mv ./kubectl /usr/local/bin/kubectl
