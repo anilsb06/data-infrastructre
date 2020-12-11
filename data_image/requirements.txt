@@ -1,4 +1,4 @@
-boto3<1.8
+boto3==1.7.84
 certifi==2018.8.24
 chardet==3.0.4
 clearbit==0.1.7
@@ -29,8 +29,8 @@ pyasn1-modules==0.2.8
 PyBambooHR==0.7.1
 pylint==2.3
 pytest==5.0.0
-python-dateutil<=2.8.1
-pytz<=2019.3
+python-dateutil==2.8.1
+pytz==2019.3
 PyYAML==5.1
 remarshal==0.10.0
 requests==2.20
@@ -39,7 +39,7 @@ simple-salesforce==1.1.0
 singer-python==5.0.15
 six==1.13.0
 slackclient==2.5.0
-snowflake-connector-python<2.2.0
+snowflake-connector-python2.1.3
 snowflake-sqlalchemy==1.2.0
 target-stitch==1.8.1
 tldextract==2.2.2
@@ -47,5 +47,5 @@ toolz==0.10.0
 urllib3==1.23
 xenon==0.7
 zeep==3.4.0
-azure-storage-blob~=2.1
-azure-storage-common~=2.1
+azure-storage-blob==2.1.0
+azure-storage-common==2.1.0
