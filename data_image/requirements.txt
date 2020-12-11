@@ -36,12 +36,10 @@ remarshal==0.10.0
 requests==2.22.0
 salesforce-bulk==2.1.0
 simple-salesforce==1.1.0
-singer-python==5.0.15
 six==1.13.0
 slackclient==2.5.0
 snowflake-connector-python==2.1.3
 snowflake-sqlalchemy==1.2.0
-target-stitch==1.8.1
 tldextract==2.2.2
 toolz==0.10.0
 urllib3==1.23
