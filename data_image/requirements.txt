@@ -33,7 +33,7 @@ python-dateutil==2.8.1
 pytz==2019.3
 PyYAML==5.1
 remarshal==0.10.0
-requests==2.20
+requests==2.22.0
 salesforce-bulk==2.1.0
 simple-salesforce==1.1.0
 singer-python==5.0.15
