@@ -1,4 +1,4 @@
-From python:3.7
+FROM python:3.7
 
 # Copy in required files
 COPY requirements.txt ./
@@ -19,3 +19,8 @@ RUN apt-get update && apt-get install -y google-cloud-sdk
 
 # Install VIM
 RUN apt-get install -y vim
+
+# Upgrade git to latest
+RUN touch /etc/apt/sources.list.d/sources.list
+RUN echo "deb http://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list.d/sources.list
+RUN apt-get update && apt-get -t buster-backports install -y git
