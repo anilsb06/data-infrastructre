@@ -4,6 +4,7 @@ chardet==3.0.4
 clearbit==0.1.7
 configparser==5.0.0
 fire==0.1.3
+flatten-dict==0.3.0
 gitlabdata==0.2.1
 google==2.0.3
 google-api-core==1.19.1
@@ -40,6 +41,8 @@ six==1.13.0
 slackclient==2.5.0
 snowflake-connector-python==2.1.3
 snowflake-sqlalchemy==1.2.0
+sql-metadata==1.11.0
+sqlparse==0.4.1
 tldextract==2.2.2
 toolz==0.10.0
 urllib3==1.23
