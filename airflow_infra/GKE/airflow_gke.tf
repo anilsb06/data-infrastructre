@@ -4,9 +4,16 @@ provider "google" {
     zone    = "us-west1-a" 
 }
 
+variable "environment" {
+    type = string
+}
+
+variable "service_account_email" {
+    type = string
+}
+
 resource "google_container_cluster" "airflow-cluster" {
     name     = var.environment == "production" ? "data-ops" : "data-ops-${var.environment}"
-    location = var.region
     remove_default_node_pool = true
     initial_node_count       = 1
 }
@@ -21,7 +28,7 @@ resource "google_container_node_pool" "highmem-pool" {
 
     node_config {
         machine_type    = "n1-highmem-4"
-        service_account = google_service_account.default.email
+        service_account = var.service_account_email
         oauth_scopes    = [
             "https://www.googleapis.com/auth/cloud-platform"
         ]
@@ -38,7 +45,7 @@ resource "google_container_node_pool" "production-task-pool" {
 
     node_config {
         machine_type    = "n1-highmem-4"
-        service_account = google_service_account.default.email
+        service_account = var.service_account_email
         oauth_scopes    = [
             "https://www.googleapis.com/auth/cloud-platform"
         ]
@@ -62,7 +69,7 @@ resource "google_container_node_pool" "scd" {
 
     node_config {
         machine_type    = "n1-highmem-4"
-        service_account = google_service_account.default.email
+        service_account = var.service_account_email
         oauth_scopes    = [
             "https://www.googleapis.com/auth/cloud-platform"
         ]
@@ -86,7 +93,7 @@ resource "google_container_node_pool" "testing-task-pool" {
 
     node_config {
         machine_type    = "n1-highmem-4"
-        service_account = google_service_account.default.email
+        service_account = var.service_account_email
         oauth_scopes    = [
             "https://www.googleapis.com/auth/cloud-platform"
         ]
