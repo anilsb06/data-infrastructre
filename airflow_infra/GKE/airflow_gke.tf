@@ -5,14 +5,14 @@ provider "google" {
 }
 
 resource "google_container_cluster" "airflow-cluster" {
-    name     = "${var.environment}-airflow-gke"
+    name     = var.environment == "prod" ? "data-ops" : "data-ops-${var.environment}"
     location = var.region
     remove_default_node_pool = true
     initial_node_count       = 1
 }
 
 resource "google_container_node_pool" "highmem-pool" {
-    name        = "${var.environment}-airflow-highmem-pool"
+    name        = var.environment == "prod" ? "highmem-pool" : "highmem-pool-${var.environment}"
     cluster     = google_container_cluster.airflow-cluster.name
     autoscaling {
         min_node_count = 1
@@ -29,7 +29,7 @@ resource "google_container_node_pool" "highmem-pool" {
 }
 
 resource "google_container_node_pool" "production-task-pool" {
-    name    = "${var.environment}-airflow-highmem-pool"
+    name    = "${var.environment}-task-pool"
     cluster = google_container_cluster.airflow_cluster.name
     autoscaling {
         min_node_count = 2
@@ -53,7 +53,7 @@ resource "google_container_node_pool" "production-task-pool" {
 }
 
 resource "google_container_node_pool" "scd" {
-    name    = "${var.environment}-airflow-scd-pool"
+    name    = var.environment == "prod" ? "scd-1" : "scd-${var.environment}"
     cluster = google_container_cluster.airflow_cluster.name
     autoscaling {
         min_node_count = 1
@@ -77,7 +77,7 @@ resource "google_container_node_pool" "scd" {
 }
 
 resource "google_container_node_pool" "testing-task-pool" {
-    name    = "${var.environment}-airflow-testing-pool"
+    name    = var.environment == "prod" ? "testing-pool" : "${var.environment}-testing-pool"
     cluster = google_container_cluster.airflow_cluster.name
     autoscaling {
         min_node_count = 0
