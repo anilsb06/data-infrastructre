@@ -3,6 +3,10 @@ provider "kubernetes" {
     config_context = "staging-context"
 }
 
+variable "environment" {
+    type = string
+}
+
 resource "kubernetes_persistent_volume" "airflow_logs" {
     metadata {
         name = var.environment == "production" ? "persistent-airflow-logs" :  "${var.environment}-persistent-airflow-logs"
