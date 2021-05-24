@@ -1,0 +1,10 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: airflow-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "airflow-webserver"
+spec:
+  backend:
+    serviceName: airflow-webserver
+    servicePort: 8080
