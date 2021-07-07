@@ -1,5 +1,10 @@
 FROM python:3.8
 
+RUN apt-get update
+
+RUN apt-get install python3-dev -y
+RUN apt-get install unixodbc-dev -y
+
 # Copy in required files
 COPY requirements.txt ./
 
