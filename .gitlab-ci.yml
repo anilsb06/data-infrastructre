@@ -133,6 +133,36 @@ prod_dbt_publish:
 
 
 # ======
+# analyst Image
+# ======
+
+mr_analyst_build:
+  <<: *mr_docker_publish
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    on_stop: mr_image_delete
+  variables:
+    IMAGE_NAME: analyst-image
+  before_script:
+    - cd analyst_image
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - analyst_image/*
+  except:
+    changes:
+      - "*.md"
+
+prod_analyst_publish:
+  <<: *prod_docker_publish
+  variables:
+    IMAGE_NAME: analyst-image
+  before_script:
+    - cd analyst_image
+
+
+# ======
 # Delete Images
 # ======
 
