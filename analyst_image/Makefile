@@ -1,6 +1,6 @@
 .PHONY: build
 
-IMAGE := data-image:test
+IMAGE := anaylst-image:test
 
 build:
 	@echo "Building image..."
