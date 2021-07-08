@@ -1,16 +1,18 @@
 # Start from a core stack version
-FROM jupyter/datascience-notebook
+FROM jupyter/tensorflow-notebook
 
 # Install from requirements.txt file
 COPY --chown=${NB_UID}:${NB_GID} requirements.txt /tmp/
 
 USER root
 
-RUN apt-get update && apt-get install --reinstall build-essential  -y
+RUN apt-get update
+RUN apt-get install -y unixodbc-dev
+RUN apt-get install --reinstall -y build-essential
 
 USER ${NB_UID}
 
-RUN pip install --quiet --no-cache-dir --requirement /tmp/requirements.txt && \
+RUN pip install --no-cache-dir --requirement /tmp/requirements.txt && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
