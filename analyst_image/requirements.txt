@@ -7,3 +7,6 @@ pyarrow==3.0.0
 plotly==4.8.2
 pyodbc==4.0.30
 simple-salesforce==1.11.2
+plaidbench==0.7.0
+plaidml==0.7.0
+plaidml-keras==0.7.0
