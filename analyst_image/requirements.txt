@@ -10,3 +10,5 @@ simple-salesforce==1.11.2
 plaidbench==0.7.0
 plaidml==0.7.0
 plaidml-keras==0.7.0
+imbalanced-learn==0.8.0
+fastdist==1.1.2

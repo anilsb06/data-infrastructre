@@ -9,6 +9,11 @@ RUN apt-get update
 RUN apt-get install -y unixodbc-dev
 RUN apt-get install --reinstall -y build-essential
 
+# Ignore the crazy errors from this build, they are expected.
+RUN cd /home && git clone -b issue191 git://github.com/jcrudy/py-earth.git  && \
+    cd py-earth && python setup.py install --cythonize && \
+    mv pyearth/ /opt/conda/lib/python3.9/site-packages
+
 USER ${NB_UID}
 
 RUN pip install --no-cache-dir --requirement /tmp/requirements.txt && \
