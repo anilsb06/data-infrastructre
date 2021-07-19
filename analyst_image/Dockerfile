@@ -11,7 +11,7 @@ RUN apt-get install --reinstall -y build-essential
 
 # Ignore the crazy errors from this build, they are expected.
 RUN cd /home && git clone -b issue191 git://github.com/jcrudy/py-earth.git  && \
-    cd py-earth && python setup.py install --cythonize
+    cd py-earth && python setup.py -q install --cythonize
 
 RUN cd /home && mv py-earth/ /usr/local/lib/python3.8/site-packages/
 
