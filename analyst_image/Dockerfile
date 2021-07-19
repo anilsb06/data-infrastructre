@@ -1,7 +1,5 @@
 FROM jupyter/tensorflow-notebook:350928623d27
 
-# Install from requirements.txt file
-COPY --chown=${NB_UID}:${NB_GID} requirements.txt /tmp/
 
 USER root
 
@@ -16,6 +14,8 @@ RUN cd /home && git clone -b issue191 git://github.com/jcrudy/py-earth.git  && \
 RUN cd /home && mv py-earth/ /usr/local/lib/python3.8/site-packages/
 
 USER ${NB_UID}
+# Install from requirements.txt file
+COPY --chown=${NB_UID}:${NB_GID} requirements.txt /tmp/
 
 RUN pip install --no-cache-dir --requirement /tmp/requirements.txt && \
     fix-permissions "${CONDA_DIR}" && \
