@@ -18,9 +18,9 @@ RUN pip install --no-cache-dir --requirement /tmp/requirements.txt && \
 USER root
 
 # Ignore the crazy errors from this build, they are expected.
-RUN cd /home/joyvan && git clone -b issue191 git://github.com/jcrudy/py-earth.git  && \
+RUN cd /home/jovyan && git clone -b issue191 git://github.com/jcrudy/py-earth.git  && \
     cd py-earth && python setup.py -q install --cythonize
 RUN mkdir /opt/conda/lib/python3.9/site-packages/pyearth
-RUN mv pyearth /opt/conda/lib/python3.9/site-packages/pyearth/
+RUN mv /home/jovyan/py-earth/pyearth /opt/conda/lib/python3.9/site-packages/pyearth/
 
 USER ${NB_UID}
