@@ -7,9 +7,6 @@ RUN apt-get update
 RUN apt-get install -y unixodbc-dev
 RUN apt-get install --reinstall -y build-essential
 
-#
-
-
 USER ${NB_UID}
 # Install from requirements.txt file
 COPY --chown=${NB_UID}:${NB_GID} requirements.txt /tmp/
