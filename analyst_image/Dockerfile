@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir --requirement /tmp/requirements.txt && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-RUN conda create -n py-earth-env
-# Make RUN commands use the new environment:
-SHELL ["conda", "run", "-n", "py-earth-env", "/bin/bash", "-c"]
-RUN conda install -y -c conda-forge/label/cf202003 sklearn-contrib-py-earth
+USER root
+
+#Ignore the crazy warnings, they are expected.
+RUN cd /home/jovyan && git clone -b issue191 git://github.com/jcrudy/py-earth.git && cd /home/jovyan/py-earth && /opt/conda/bin/python -q setup.py install --cythonize && mkdir /opt/conda/lib/python3.9/site-packages/pyearth && mv /home/jovyan/py-earth/pyearth /opt/conda/lib/python3.9/site-packages/pyearth/
