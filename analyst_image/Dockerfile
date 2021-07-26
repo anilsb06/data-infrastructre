@@ -18,4 +18,4 @@ RUN pip install --no-cache-dir --requirement /tmp/requirements.txt && \
 USER root
 
 #Ignore the crazy warnings, they are expected.
-RUN cd /home/jovyan && git clone -b issue191 git://github.com/jcrudy/py-earth.git && cd /home/jovyan/py-earth && /opt/conda/bin/python -q setup.py install --cythonize && mkdir /opt/conda/lib/python3.8/site-packages/pyearth && mv /home/jovyan/py-earth/pyearth /opt/conda/lib/python3.8/site-packages/pyearth/
+RUN cd /home/jovyan && git clone -b issue191 git://github.com/jcrudy/py-earth.git && cd /home/jovyan/py-earth && /opt/conda/bin/python -q setup.py install --cythonize
