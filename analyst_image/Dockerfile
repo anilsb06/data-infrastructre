@@ -1,4 +1,4 @@
-FROM jupyter/tensorflow-notebook:350928623d27
+FROM jupyter/tensorflow-notebook:python-3.8.8
 
 
 USER root
@@ -17,10 +17,5 @@ RUN pip install --no-cache-dir --requirement /tmp/requirements.txt && \
 
 USER root
 
-# Ignore the crazy errors from this build, they are expected.
-RUN cd /home/jovyan && git clone -b issue191 git://github.com/jcrudy/py-earth.git  && \
-    cd py-earth && python setup.py -q install --cythonize
-RUN mkdir /opt/conda/lib/python3.9/site-packages/pyearth
-RUN mv /home/jovyan/py-earth/pyearth /opt/conda/lib/python3.9/site-packages/pyearth/
-
-USER ${NB_UID}
+#Ignore the crazy warnings, they are expected.
+RUN cd /home/jovyan && git clone -b issue191 git://github.com/jcrudy/py-earth.git && cd /home/jovyan/py-earth && /opt/conda/bin/python -q setup.py install --cythonize && rm -R /home/jovyan/py-earth
