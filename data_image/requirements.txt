@@ -33,7 +33,7 @@ pylint==2.3
 pytest==5.0.0
 python-dateutil==2.8.1
 pytz==2019.3
-PyYAML==5.1
+PyYAML==5.4.1
 remarshal==0.10.0
 requests==2.22.0
 salesforce-bulk==2.1.0
