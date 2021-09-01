@@ -68,6 +68,12 @@ spec:
                 secretKeyRef:
                   name: airflow
                   key: AIRFLOW__CORE__FERNET_KEY
+            - name: AIRFLOW__WEBSERVER__SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: airflow
+                  key: AIRFLOW__WEBSERVER__SECRET_KEY
+
           volumeMounts:
             - name: airflow-secrets
               mountPath: /secrets/cloudsql/
@@ -124,6 +130,11 @@ spec:
                 secretKeyRef:
                   name: airflow
                   key: AIRFLOW__CORE__FERNET_KEY
+            - name: AIRFLOW__WEBSERVER__SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: airflow
+                  key: AIRFLOW__WEBSERVER__SECRET_KEY
           volumeMounts:
             - name: airflow-secrets
               mountPath: /secrets/cloudsql/
@@ -181,6 +192,11 @@ spec:
                 secretKeyRef:
                   name: airflow
                   key: AIRFLOW__CORE__FERNET_KEY
+            - name: AIRFLOW__WEBSERVER__SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: airflow
+                  key: AIRFLOW__WEBSERVER__SECRET_KEY
           volumeMounts:
             - name: analytics-repo
               mountPath: /usr/local/airflow/analytics
