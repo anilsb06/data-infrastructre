@@ -29,7 +29,6 @@ resource "google_container_node_pool" "highmem-pool" {
         min_node_count = 1
         max_node_count = 2
     }
-    node_count=1
     node_config {
         machine_type    = "n1-highmem-4"
         image_type = "COS"
