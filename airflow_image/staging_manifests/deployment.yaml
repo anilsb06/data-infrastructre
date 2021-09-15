@@ -31,7 +31,7 @@ spec:
       containers:
       # airflow scheduler
         - name: scheduler
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:analytics-9046-upgrade-airflow-to-1-10-15
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           resources:
             limits:
               memory: "4000Mi"
@@ -42,7 +42,7 @@ spec:
           env:
             # General
             - name: GIT_BRANCH
-              value: "mwalker-airflow-upgrade"
+              value: "master"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -93,7 +93,7 @@ spec:
 
         # airflow webserver
         - name: webserver
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:analytics-9046-upgrade-airflow-to-1-10-15
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           resources:
             limits:
               memory: "1000Mi"
@@ -104,7 +104,7 @@ spec:
           env:
             # General
             - name: GIT_BRANCH
-              value: "mwalker-airflow-upgrade"
+              value: "master"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -173,7 +173,7 @@ spec:
 
         # periodically clone the repo to get updated code/dags
         - name: watcher
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:analytics-9046-upgrade-airflow-to-1-10-15
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           resources:
             limits:
               memory: "100Mi"
@@ -218,7 +218,7 @@ spec:
               memory: "200Mi"
               cpu: "500m"
           command: ["/cloud_sql_proxy",
-                    "-instances=gitlab-analysis:us-west1:airflow-pg-staging=tcp:5432",
+                    "-instances=gitlab-analysis:us-west1:airflow-pg-clone=tcp:5432",
                     "-credential_file=/secrets/cloudsql/cloudsql-credentials"]
           securityContext:
             runAsUser: 2  # non-root user
@@ -231,7 +231,7 @@ spec:
       initContainers:
         # Get the credentials for k8s before the other repos start up
         - name: init-creds
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:analytics-9046-upgrade-airflow-to-1-10-15
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           command: ["/bin/sh", "-c"]
           args: ["gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials && \
                   gcloud container clusters get-credentials data-ops-staging --region us-west1-a --project gitlab-analysis"]
@@ -243,9 +243,9 @@ spec:
               mountPath: /root/.kube/
         # Copy the repo before the other containers start up
         - name: init-repo
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:analytics-9046-upgrade-airflow-to-1-10-15
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           command: ["/bin/sh", "-c"]
-          args: ["git clone -b mwalker-airflow-upgrade --single-branch $REPO --depth 1"]
+          args: ["git clone -b master --single-branch $REPO --depth 1"]
           env:
             - name: REPO
               value: "https://gitlab.com/gitlab-data/analytics.git"
