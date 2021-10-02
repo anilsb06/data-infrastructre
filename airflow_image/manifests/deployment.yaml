@@ -96,11 +96,11 @@ spec:
           image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           resources:
             limits:
+              memory: "4000Mi"
+              cpu: "4000m"
+            requests:
               memory: "1000Mi"
               cpu: "1000m"
-            requests:
-              memory: "200Mi"
-              cpu: "200m"
           env:
             # General
             - name: GIT_BRANCH
@@ -218,7 +218,7 @@ spec:
               memory: "200Mi"
               cpu: "500m"
           command: ["/cloud_sql_proxy",
-                    "-instances=gitlab-analysis:us-west1:airflow-pg=tcp:5432",
+                    "-instances=gitlab-analysis:us-west1:airflow-pg-clone-2=tcp:5432",
                     "-credential_file=/secrets/cloudsql/cloudsql-credentials"]
           securityContext:
             runAsUser: 2  # non-root user
