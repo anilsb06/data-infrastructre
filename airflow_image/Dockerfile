@@ -1,5 +1,9 @@
 FROM python:3.8
 
+# Python Deps
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
 # Airflow Config
 ARG AIRFLOW_VERSION=2.1.3
 ARG PYTHON_VERSION=3.8
@@ -23,10 +27,6 @@ RUN pip install -U pip
 RUN pip install apache-airflow==${AIRFLOW_VERSION} --constraint ${CONSTRAINT_URL}
 COPY airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
-
-# Python Deps
-COPY requirements.txt .
-RUN pip install -r requirements.txt
 
 # Install Google SQL Proxy
 RUN wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/bin/cloud_sql_proxy
