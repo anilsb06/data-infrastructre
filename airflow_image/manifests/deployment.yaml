@@ -31,7 +31,7 @@ spec:
       containers:
       # airflow scheduler
         - name: scheduler
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.22
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           resources:
             limits:
               memory: "4000Mi"
@@ -93,14 +93,14 @@ spec:
 
         # airflow webserver
         - name: webserver
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.22
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           resources:
             limits:
+              memory: "8000Mi"
+              cpu: "8000m"
+            requests:
               memory: "4000Mi"
               cpu: "4000m"
-            requests:
-              memory: "1000Mi"
-              cpu: "1000m"
           env:
             # General
             - name: GIT_BRANCH
@@ -173,7 +173,7 @@ spec:
 
         # periodically clone the repo to get updated code/dags
         - name: watcher
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.22
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           resources:
             limits:
               memory: "100Mi"
@@ -231,7 +231,7 @@ spec:
       initContainers:
         # Get the credentials for k8s before the other repos start up
         - name: init-creds
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.22
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           command: ["/bin/sh", "-c"]
           args: ["gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials && \
                   gcloud container clusters get-credentials data-ops --region us-west1-a --project gitlab-analysis"]
@@ -243,7 +243,7 @@ spec:
               mountPath: /root/.kube/
         # Copy the repo before the other containers start up
         - name: init-repo
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.22
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           command: ["/bin/sh", "-c"]
           args: ["git clone -b master --single-branch $REPO --depth 1"]
           env:

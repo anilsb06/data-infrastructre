@@ -1,7 +1,7 @@
 FROM python:3.8
 
 # Airflow Config
-ARG AIRFLOW_VERSION=1.10.15
+ARG AIRFLOW_VERSION=2.1.3
 ARG AIRFLOW_HOME=/usr/local/airflow
 ARG AIRFLOW_DEPS="crypto,gcp_api,google_auth,kubernetes,password,slack"
 ENV AIRFLOW_GPL_UNIDECODE yes
