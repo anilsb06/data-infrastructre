@@ -42,7 +42,7 @@ spec:
           env:
             # General
             - name: GIT_BRANCH
-              value: "master"
+              value: "airflow_upgrade_testing"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -104,7 +104,7 @@ spec:
           env:
             # General
             - name: GIT_BRANCH
-              value: "master"
+              value: "airflow_upgrade_testing"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
