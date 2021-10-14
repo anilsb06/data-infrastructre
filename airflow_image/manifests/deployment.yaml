@@ -97,10 +97,10 @@ spec:
           resources:
             limits:
               memory: "8000Mi"
-              cpu: "8000m"
+              cpu: "3000m"
             requests:
               memory: "4000Mi"
-              cpu: "4000m"
+              cpu: "2000m"
           env:
             # General
             - name: GIT_BRANCH
