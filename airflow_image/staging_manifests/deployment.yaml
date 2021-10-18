@@ -176,7 +176,7 @@ spec:
 
         # periodically clone the repo to get updated code/dags
         - name: watcher
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:102-2021-10-11-airflow-intermittent-503-errors-degraded-performance
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
           imagePullPolicy: Always
           resources:
             limits:
@@ -236,7 +236,7 @@ spec:
       initContainers:
         # Get the credentials for k8s before the other repos start up
         - name: init-creds
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:102-2021-10-11-airflow-intermittent-503-errors-degraded-performance
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
           imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args: ["gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials && \
