@@ -43,6 +43,8 @@ spec:
               cpu: "1000m"
           env:
             # General
+            - name: GIT_BRANCH
+              value: "upgrade_dependency_resolution"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -104,6 +106,8 @@ spec:
               cpu: "200m"
           env:
             # General
+            - name: GIT_BRANCH
+              value: "upgrade_dependency_resolution"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
