@@ -1,6 +1,7 @@
 apache-airflow-providers-cncf-kubernetes==2.0.3
 apache-airflow-providers-slack==4.1.0
 chardet==3.0.4
+feedparser==6.0.1
 fire==0.3.1
 gitlabdata==0.2.1
 psycopg2-binary==2.8.5
