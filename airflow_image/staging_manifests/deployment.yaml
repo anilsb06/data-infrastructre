@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: airflow-deployment
   namespace: default
+  
 spec:
   selector:
     matchLabels:
@@ -31,7 +32,8 @@ spec:
       containers:
       # airflow scheduler
         - name: scheduler
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:102-2021-10-11-airflow-intermittent-503-errors-degraded-performance
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "4000Mi"
@@ -93,7 +95,8 @@ spec:
 
         # airflow webserver
         - name: webserver
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:102-2021-10-11-airflow-intermittent-503-errors-degraded-performance
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "1000Mi"
@@ -174,6 +177,7 @@ spec:
         # periodically clone the repo to get updated code/dags
         - name: watcher
           image: registry.gitlab.com/gitlab-data/data-image/airflow-image:102-2021-10-11-airflow-intermittent-503-errors-degraded-performance
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "100Mi"
@@ -210,6 +214,7 @@ spec:
           # cloudsql proxy for airflow to talk to the database
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "1000Mi"
@@ -218,7 +223,7 @@ spec:
               memory: "200Mi"
               cpu: "500m"
           command: ["/cloud_sql_proxy",
-                    "-instances=gitlab-analysis:us-west1:airflow-pg-clone=tcp:5432",
+                    "-instances=gitlab-analysis:us-west1:airflow-pg-clone-staging-20211014=tcp:5432",
                     "-credential_file=/secrets/cloudsql/cloudsql-credentials"]
           securityContext:
             runAsUser: 2  # non-root user
@@ -232,6 +237,7 @@ spec:
         # Get the credentials for k8s before the other repos start up
         - name: init-creds
           image: registry.gitlab.com/gitlab-data/data-image/airflow-image:102-2021-10-11-airflow-intermittent-503-errors-degraded-performance
+          imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args: ["gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials && \
                   gcloud container clusters get-credentials data-ops-staging --region us-west1-a --project gitlab-analysis"]
@@ -244,6 +250,7 @@ spec:
         # Copy the repo before the other containers start up
         - name: init-repo
           image: registry.gitlab.com/gitlab-data/data-image/airflow-image:102-2021-10-11-airflow-intermittent-503-errors-degraded-performance
+          imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args: ["git clone -b master --single-branch $REPO --depth 1"]
           env:
