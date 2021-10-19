@@ -16,6 +16,13 @@ variable "subnetwork" {
 variable "min_master_version" {
   type =  string
 }
+variable "cluster_ipv4_cidr_block" {
+    type = string
+}
+variable "services_ipv4_cidr_block" {
+    type = string
+  
+}
 
 resource "google_container_cluster" "airflow_cluster" {
     project = "gitlab-analysis"
@@ -26,8 +33,8 @@ resource "google_container_cluster" "airflow_cluster" {
     network = var.network_mode
     networking_mode = "VPC_NATIVE"
     ip_allocation_policy {
-        cluster_ipv4_cidr_block = "10.200.0.0/14"
-        services_ipv4_cidr_block = "10.204.0.0/20"
+        cluster_ipv4_cidr_block = var.cluster_ipv4_cidr_block
+        services_ipv4_cidr_block = var.services_ipv4_cidr_block
     }
     remove_default_node_pool = true
     subnetwork=var.subnetwork
@@ -58,14 +65,25 @@ resource "google_container_node_pool" "highmem-pool" {
     name        = var.environment == "production" ? "highmem-pool" : "highmem-pool-${var.environment}"
     location = "us-west1-a"
     cluster     = google_container_cluster.airflow_cluster.name
+    node_count = 2
     autoscaling {
         min_node_count = 1
         max_node_count = 2
     }
-    node_count = 2
     node_config {
         machine_type    = "n1-highmem-4"
         image_type = "COS"
+        disk_type = "pd-standard"
+        disk_size_gb = 100
+        preemptible = false        
+    }
+    upgrade_settings {
+      max_surge=1
+      max_unavailable=0
+    }
+    management {
+      auto_repair=true
+      auto_upgrade=true
     }
 }
 
@@ -78,17 +96,28 @@ resource "google_container_node_pool" "production-task-pool" {
         min_node_count = 2
         max_node_count = 5
     }
-    
     node_config {
         machine_type    = "n1-highmem-4"
         image_type = "COS"
+        disk_type = "pd-standard"
+        disk_size_gb = 100
+        preemptible = false
         taint = [
             {
                 effect = "NO_SCHEDULE",
-                key    = "production",
+                key    = "${var.environment}",
                 value  = "true"
             }
         ]
+        labels = {"${var.environment}"="true"}  
+    }
+    upgrade_settings {
+        max_surge=1
+        max_unavailable=0
+    }
+    management {
+        auto_repair=true
+        auto_upgrade=true
     }
 }
 
@@ -101,17 +130,28 @@ resource "google_container_node_pool" "sdc" {
         min_node_count = 1
         max_node_count = 3
     }
-
     node_config {
         machine_type    = "n1-highmem-4"
         image_type = "COS"
+        disk_type = "pd-standard"
+        disk_size_gb = 100
+        preemptible = false
         taint = [
             {
                 effect = "NO_SCHEDULE",
-                key    = "sdc",
+                key    = "scd",
                 value  = "true"
             }
         ]
+        labels = {pgp="scd"}
+    }
+    upgrade_settings {
+        max_surge=1
+        max_unavailable=0
+    }
+    management {
+        auto_repair=true
+        auto_upgrade=true
     }
 }
 
@@ -119,15 +159,17 @@ resource "google_container_node_pool" "testing-task-pool" {
     name    = var.environment == "production" ? "testing-pool" : "${var.environment}-testing-pool"
     location = "us-west1-a"
     cluster = google_container_cluster.airflow_cluster.name
+    node_count = 0
     autoscaling {
         min_node_count = 0
         max_node_count = 1
     }
-    node_count = 0
-
     node_config {
         machine_type    = "n1-highmem-4"
         image_type = "COS"
+        disk_type = "pd-standard"
+        disk_size_gb = 100
+        preemptible = false
         taint = [
             {
                 effect = "NO_SCHEDULE",
@@ -135,5 +177,6 @@ resource "google_container_node_pool" "testing-task-pool" {
                 value  = "true"
             }
         ]
+        labels = {test="true"}
     }
 }
