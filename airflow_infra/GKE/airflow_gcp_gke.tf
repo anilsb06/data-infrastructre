@@ -18,26 +18,28 @@ variable "min_master_version" {
 }
 
 resource "google_container_cluster" "airflow_cluster" {
+    project = "gitlab-analysis"
+    location = "us-west1-a"
     provider = google-beta
     name     = var.environment == "production" ? "data-ops" : "data-ops-${var.environment}"
     description = var.environment == "production" ? "Production ELT cluster" : "${var.environment} ELT Cluster"
     network = var.network_mode
     networking_mode = "VPC_NATIVE"
     ip_allocation_policy {
-        cluster_ipv4_cidr_block = "10.180.0.0/14"
-        services_ipv4_cidr_block = "10.182.224.0/20"
+        cluster_ipv4_cidr_block = "10.200.0.0/14"
+        services_ipv4_cidr_block = "10.204.0.0/20"
     }
     remove_default_node_pool = true
     subnetwork=var.subnetwork
     initial_node_count       = 1
     min_master_version = var.min_master_version
-    release_channel {
-      channel="UNSPECIFIED"
-    }
-    maintenance_policy {
-      daily_maintenance_window {
-        start_time="15:00"
+    addons_config {
+      horizontal_pod_autoscaling {
+        disabled=true
       }
+    }
+   release_channel {
+        channel="UNSPECIFIED"
     }
     notification_config {
         pubsub {
@@ -45,24 +47,22 @@ resource "google_container_cluster" "airflow_cluster" {
         }
     }
     vertical_pod_autoscaling {
-      enabled=false
-    }
-    cluster_autoscaling {
-        enabled = true
-      autoscaling_profile = "BALANCED"
+        enabled=false
     }
     private_cluster_config {
-      enable_private_endpoint = false
+        enable_private_endpoint = false
     }
 }
 
 resource "google_container_node_pool" "highmem-pool" {
     name        = var.environment == "production" ? "highmem-pool" : "highmem-pool-${var.environment}"
+    location = "us-west1-a"
     cluster     = google_container_cluster.airflow_cluster.name
     autoscaling {
         min_node_count = 1
         max_node_count = 2
     }
+    node_count = 2
     node_config {
         machine_type    = "n1-highmem-4"
         image_type = "COS"
@@ -71,13 +71,14 @@ resource "google_container_node_pool" "highmem-pool" {
 
 resource "google_container_node_pool" "production-task-pool" {
     name    = "${var.environment}-task-pool"
+    location = "us-west1-a"
     cluster = google_container_cluster.airflow_cluster.name
+    node_count = 2
     autoscaling {
         min_node_count = 2
         max_node_count = 5
     }
     
-
     node_config {
         machine_type    = "n1-highmem-4"
         image_type = "COS"
@@ -91,9 +92,11 @@ resource "google_container_node_pool" "production-task-pool" {
     }
 }
 
-resource "google_container_node_pool" "scd" {
-    name    = var.environment == "production" ? "scd-1" : "scd-${var.environment}"
+resource "google_container_node_pool" "sdc" {
+    name    = var.environment == "production" ? "sdc-1" : "sdc-${var.environment}"
+    location = "us-west1-a"
     cluster = google_container_cluster.airflow_cluster.name
+    node_count = 1
     autoscaling {
         min_node_count = 1
         max_node_count = 3
@@ -105,7 +108,7 @@ resource "google_container_node_pool" "scd" {
         taint = [
             {
                 effect = "NO_SCHEDULE",
-                key    = "scd",
+                key    = "sdc",
                 value  = "true"
             }
         ]
@@ -114,11 +117,13 @@ resource "google_container_node_pool" "scd" {
 
 resource "google_container_node_pool" "testing-task-pool" {
     name    = var.environment == "production" ? "testing-pool" : "${var.environment}-testing-pool"
+    location = "us-west1-a"
     cluster = google_container_cluster.airflow_cluster.name
     autoscaling {
         min_node_count = 0
         max_node_count = 1
     }
+    node_count = 0
 
     node_config {
         machine_type    = "n1-highmem-4"
