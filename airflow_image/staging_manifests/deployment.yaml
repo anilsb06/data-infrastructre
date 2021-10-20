@@ -95,7 +95,7 @@ spec:
 
         # airflow webserver
         - name: webserver
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:102-2021-10-11-airflow-intermittent-503-errors-degraded-performance
           imagePullPolicy: Always
           resources:
             limits:
