@@ -20,10 +20,20 @@ variable "cluster_ipv4_cidr_block" {
     type = string
 }
 variable "services_ipv4_cidr_block" {
-    type = string
-  
+    type = string  
 }
-
+variable "highmem_pool_node_count" {
+    type = number
+}
+variable "production_task_pool_node_count" {
+    type = number
+}
+variable "sdc_task_pool_node_count" {
+    type = number
+}
+variable "testing_task_pool_node_count" {
+    type = number
+}
 resource "google_container_cluster" "airflow_cluster" {
     project = "gitlab-analysis"
     location = "us-west1-a"
@@ -65,7 +75,7 @@ resource "google_container_node_pool" "highmem-pool" {
     name        = var.environment == "production" ? "highmem-pool" : "highmem-pool-${var.environment}"
     location = "us-west1-a"
     cluster     = google_container_cluster.airflow_cluster.name
-    node_count = 2
+    node_count = var.highmem_pool_node_count
     autoscaling {
         min_node_count = 1
         max_node_count = 2
@@ -91,7 +101,7 @@ resource "google_container_node_pool" "production-task-pool" {
     name    = "${var.environment}-task-pool"
     location = "us-west1-a"
     cluster = google_container_cluster.airflow_cluster.name
-    node_count = 2
+    node_count = var.production_task_pool_node_count
     autoscaling {
         min_node_count = 2
         max_node_count = 5
@@ -125,7 +135,7 @@ resource "google_container_node_pool" "sdc" {
     name    = var.environment == "production" ? "sdc-1" : "sdc-${var.environment}"
     location = "us-west1-a"
     cluster = google_container_cluster.airflow_cluster.name
-    node_count = 1
+    node_count = var.sdc_task_pool_node_count
     autoscaling {
         min_node_count = 1
         max_node_count = 3
@@ -159,7 +169,7 @@ resource "google_container_node_pool" "testing-task-pool" {
     name    = var.environment == "production" ? "testing-pool" : "${var.environment}-testing-pool"
     location = "us-west1-a"
     cluster = google_container_cluster.airflow_cluster.name
-    node_count = 0
+    node_count = var.testing_task_pool_node_count
     autoscaling {
         min_node_count = 0
         max_node_count = 1

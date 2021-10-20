@@ -4,3 +4,7 @@ subnetwork= "gke-bizops-runner-subnet-37859e17"
 min_master_version="1.19.13-gke.1200"
 cluster_ipv4_cidr_block="10.184.0.0/14"
 services_ipv4_cidr_block="10.181.224.0/20"
+highmem_pool_node_count=2
+production_task_pool_node_count=2
+sdc_task_pool_node_count=1
+testing_task_pool_node_count=1
