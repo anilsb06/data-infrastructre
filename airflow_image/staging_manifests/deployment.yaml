@@ -3,7 +3,6 @@ kind: Deployment
 metadata:
   name: airflow-deployment
   namespace: default
-  
 spec:
   selector:
     matchLabels:
