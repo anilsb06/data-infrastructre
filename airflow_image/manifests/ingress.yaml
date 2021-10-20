@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: airflow-ingress
@@ -14,7 +14,10 @@ spec:
   - host: airflow.gitlabdata.com
     http:
       paths:
-      - path: /
+      - pathType: Prefix
+        path: "/"
         backend:
-          serviceName: airflow-webserver
-          servicePort: 8080
+          service: 
+              name: airflow-webserver
+              port: 
+                number: 8080
