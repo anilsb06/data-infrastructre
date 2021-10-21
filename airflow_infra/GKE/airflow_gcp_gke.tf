@@ -171,8 +171,8 @@ resource "google_container_node_pool" "testing-task-pool" {
     cluster = google_container_cluster.airflow_cluster.name
     node_count = var.testing_task_pool_node_count
     autoscaling {
-        min_node_count = 0
-        max_node_count = 1
+        min_node_count = 1
+        max_node_count = 2
     }
     node_config {
         machine_type    = "n1-highmem-4"
