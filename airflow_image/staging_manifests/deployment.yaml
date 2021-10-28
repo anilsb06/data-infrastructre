@@ -43,7 +43,7 @@ spec:
           env:
             # General
             - name: GIT_BRANCH
-              value: "upgrade_dependency_resolution"
+              value: "airflow_upgrade_only"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -94,7 +94,7 @@ spec:
 
         # airflow webserver
         - name: webserver
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:102-2021-10-11-airflow-intermittent-503-errors-degraded-performance
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
           imagePullPolicy: Always
           resources:
             limits:
@@ -106,7 +106,7 @@ spec:
           env:
             # General
             - name: GIT_BRANCH
-              value: "upgrade_dependency_resolution"
+              value: "airflow_upgrade_only"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -222,7 +222,8 @@ spec:
               memory: "200Mi"
               cpu: "500m"
           command: ["/cloud_sql_proxy",
-                    "-instances=gitlab-analysis:us-west1:airflow-pg-clone-staging-20211014=tcp:5432",
+                #   "-instances=gitlab-analysis:us-west1:airflow-pg-clone-staging-20211014=tcp:5432",
+                    "-instances=gitlab-analysis:us-west1:airflow-pg-clone=tcp:5432",
                     "-credential_file=/secrets/cloudsql/cloudsql-credentials"]
           securityContext:
             runAsUser: 2  # non-root user
@@ -256,7 +257,7 @@ spec:
             - name: REPO
               value: "https://gitlab.com/gitlab-data/analytics.git"
             - name: GIT_BRANCH
-              value: "upgrade_dependency_resolution"
+              value: "airflow_upgrade_only"
           volumeMounts:
             - name: analytics-repo
               mountPath: /usr/local/airflow/analytics

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: airflow-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  namespace: staging
+spec:
+  tls:
+  - hosts:
+    - airflow.gitlabdata.com
+    secretName: airflow-tls
+  rules:
+  - host: airflow.gitlabdata.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service: 
+              name: airflow-webserver
+              port: 
+                number: 8080
