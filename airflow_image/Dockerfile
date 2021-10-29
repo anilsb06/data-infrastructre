@@ -1,9 +1,15 @@
 FROM python:3.8
 
+# Python Deps
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
 # Airflow Config
-ARG AIRFLOW_VERSION=1.10.15
+ARG AIRFLOW_VERSION=2.1.3
+ARG PYTHON_VERSION=3.8
 ARG AIRFLOW_HOME=/usr/local/airflow
-ARG AIRFLOW_DEPS="crypto,gcp_api,google_auth,kubernetes,password,slack"
+#ARG AIRFLOW_DEPS="crypto,gcp_api,google_auth,kubernetes,password,slack"
+ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-2.1.3/constraints-no-providers-3.8.txt"
 ENV AIRFLOW_GPL_UNIDECODE yes
 
 ENV AIRFLOW_HOME=${AIRFLOW_HOME}
@@ -18,13 +24,9 @@ RUN mv ./kubectl /usr/local/bin/kubectl
 
 # Airflow Installation
 RUN pip install -U pip
-RUN pip install apache-airflow[${AIRFLOW_DEPS}]==${AIRFLOW_VERSION}
+RUN pip install apache-airflow==${AIRFLOW_VERSION} --constraint ${CONSTRAINT_URL}
 COPY airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
-
-# Python Deps
-COPY requirements.txt .
-RUN pip install -r requirements.txt
 
 # Install Google SQL Proxy
 RUN wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/bin/cloud_sql_proxy

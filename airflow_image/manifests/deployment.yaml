@@ -96,11 +96,11 @@ spec:
           image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           resources:
             limits:
-              memory: "4000Mi"
-              cpu: "4000m"
+              memory: "8000Mi"
+              cpu: "3000m"
             requests:
-              memory: "1000Mi"
-              cpu: "1000m"
+              memory: "4000Mi"
+              cpu: "2000m"
           env:
             # General
             - name: GIT_BRANCH

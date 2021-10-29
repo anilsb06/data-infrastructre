@@ -1,7 +1,7 @@
 apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  name: airflow-deployment
+  name: airflow-deployment-staging
   namespace: staging
 spec:
   selector:
@@ -31,7 +31,8 @@ spec:
       containers:
       # airflow scheduler
         - name: scheduler
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "4000Mi"
@@ -42,7 +43,7 @@ spec:
           env:
             # General
             - name: GIT_BRANCH
-              value: "master"
+              value: "airflow_upgrade_only"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -93,18 +94,19 @@ spec:
 
         # airflow webserver
         - name: webserver
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
+          imagePullPolicy: Always
           resources:
             limits:
-              memory: "1000Mi"
-              cpu: "1000m"
+              memory: "2000Mi"
+              cpu: "2000m"
             requests:
-              memory: "200Mi"
-              cpu: "200m"
+              memory: "400Mi"
+              cpu: "400m"
           env:
             # General
             - name: GIT_BRANCH
-              value: "master"
+              value: "airflow_upgrade_only"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS
@@ -173,7 +175,8 @@ spec:
 
         # periodically clone the repo to get updated code/dags
         - name: watcher
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "100Mi"
@@ -210,6 +213,7 @@ spec:
           # cloudsql proxy for airflow to talk to the database
         - name: cloudsql-proxy
           image: gcr.io/cloudsql-docker/gce-proxy:1.11
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "1000Mi"
@@ -218,6 +222,7 @@ spec:
               memory: "200Mi"
               cpu: "500m"
           command: ["/cloud_sql_proxy",
+                #   "-instances=gitlab-analysis:us-west1:airflow-pg-clone-staging-20211014=tcp:5432",
                     "-instances=gitlab-analysis:us-west1:airflow-pg-clone=tcp:5432",
                     "-credential_file=/secrets/cloudsql/cloudsql-credentials"]
           securityContext:
@@ -231,7 +236,8 @@ spec:
       initContainers:
         # Get the credentials for k8s before the other repos start up
         - name: init-creds
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
+          imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args: ["gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials && \
                   gcloud container clusters get-credentials data-ops-staging --region us-west1-a --project gitlab-analysis"]
@@ -243,12 +249,15 @@ spec:
               mountPath: /root/.kube/
         # Copy the repo before the other containers start up
         - name: init-repo
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
+          imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
-          args: ["git clone -b master --single-branch $REPO --depth 1"]
+          args: ["git clone -b $GIT_BRANCH --single-branch $REPO --depth 1"]
           env:
             - name: REPO
               value: "https://gitlab.com/gitlab-data/analytics.git"
+            - name: GIT_BRANCH
+              value: "airflow_upgrade_only"
           volumeMounts:
             - name: analytics-repo
               mountPath: /usr/local/airflow/analytics
