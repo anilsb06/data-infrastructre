@@ -13,3 +13,4 @@ plaidml-keras==0.7.0
 imbalanced-learn==0.8.0
 fastdist==1.1.2
 jupyterlab-git==0.30.1
+papermill==2.3.3
