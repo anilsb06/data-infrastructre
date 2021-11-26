@@ -1,5 +1,5 @@
 dbt==0.19.1
-gitlabdata==v0.3.8
+gitlabdata==v0.3.9
 pandas==0.25.3
 requests==2.22.0
 urllib3==1.24.0
