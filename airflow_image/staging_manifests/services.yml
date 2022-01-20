@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: airflow-webserver
+  name: airflow-webserver-staging
   namespace: staging
 spec:
   selector:
