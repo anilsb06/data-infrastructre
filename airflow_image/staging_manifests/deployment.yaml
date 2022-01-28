@@ -88,13 +88,13 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ["/bin/sh", "-c", "gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials"]
+                command: ["/bin/sh", "-c", "gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials", "airflow db init"]
           command: ["airflow"]
           args: ["scheduler"]
 
         # airflow webserver
         - name: webserver
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:remove_all_old_dependencies
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:airflow_upgrade_test_latest
           imagePullPolicy: Always
           resources:
             limits:
