@@ -222,8 +222,7 @@ spec:
               memory: "200Mi"
               cpu: "500m"
           command: ["/cloud_sql_proxy",
-                    "-instances=gitlab-analysis:us-west1:airflow-pg-clone-staging-20211014=tcp:5432",
-                 #   "-instances=gitlab-analysis:us-west1:airflow-pg-clone=tcp:5432",
+                    "-instances=gitlab-analysis:us-west1:airflow-pg-staging-2=tcp:5432",
                     "-credential_file=/secrets/cloudsql/cloudsql-credentials"]
           securityContext:
             runAsUser: 2  # non-root user
