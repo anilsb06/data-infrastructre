@@ -232,6 +232,18 @@ spec:
               mountPath: /secrets/cloudsql/
               readOnly: true
 
+      initDatabase:
+        # Get the credentials for k8s before the other repos start up
+        - name: init-db
+          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:airflow_upgrade_test_latest
+          imagePullPolicy: Always
+          command: ["airflow", "init db"]
+          volumeMounts:
+            - name: airflow-secrets
+              mountPath: /secrets/cloudsql/
+              readOnly: true
+            - name: kube-config
+              mountPath: /root/.kube/
       initContainers:
         # Get the credentials for k8s before the other repos start up
         - name: init-creds
