@@ -88,7 +88,7 @@ spec:
           lifecycle:
             postStart:
               exec:
-                command: ["/bin/sh", "-c", "gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials", "airflow db init"]
+                command: ["/bin/sh", "-c", "gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials"]
           command: ["airflow"]
           args: ["scheduler"]
 
@@ -242,8 +242,7 @@ spec:
           imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args: ["gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials && \
-                  gcloud container clusters get-credentials data-ops-staging --region us-west1-a --project gitlab-analysis && \
-                  airflow scheduler db init"]
+                  gcloud container clusters get-credentials data-ops-staging --region us-west1-a --project gitlab-analysis"]
           volumeMounts:
             - name: airflow-secrets
               mountPath: /secrets/cloudsql/
@@ -264,14 +263,3 @@ spec:
           volumeMounts:
             - name: analytics-repo
               mountPath: /usr/local/airflow/analytics
-        # Setup the db
-        - name: init-db
-          image: registry.gitlab.com/gitlab-data/data-image/airflow-image:airflow_upgrade_test_latest
-          imagePullPolicy: Always
-          command: ["airflow", "scheduler", "db init"]
-          volumeMounts:
-            - name: airflow-secrets
-              mountPath: /secrets/cloudsql/
-              readOnly: true
-            - name: kube-config
-              mountPath: /root/.kube/
