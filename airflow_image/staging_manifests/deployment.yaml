@@ -242,7 +242,8 @@ spec:
           imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
           args: ["gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials && \
-                  gcloud container clusters get-credentials data-ops-staging --region us-west1-a --project gitlab-analysis"]
+                  gcloud container clusters get-credentials data-ops-staging --region us-west1-a --project gitlab-analysis && \
+                  airflow scheduler db init"]
           volumeMounts:
             - name: airflow-secrets
               mountPath: /secrets/cloudsql/
