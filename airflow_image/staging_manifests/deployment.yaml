@@ -232,9 +232,6 @@ spec:
               mountPath: /secrets/cloudsql/
               readOnly: true
 
-      initDatabase:
-        # Get the credentials for k8s before the other repos start up
-
       initContainers:
         # Get the credentials for k8s before the other repos start up
         - name: init-creds
