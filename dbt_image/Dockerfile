@@ -1,5 +1,9 @@
 FROM python:3.8
 
+# COPY SQL fluff files.
+COPY .sqlfluff-ci ./
+COPY .sqlfluffignore ./
+
 # Copy in required files
 COPY requirements.txt ./
 
