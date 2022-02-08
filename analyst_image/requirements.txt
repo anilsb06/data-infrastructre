@@ -1,4 +1,5 @@
 gitlabdata==0.3.6
+gitlabds==1.0.12
 eli5==0.11.0
 snowflake-connector-python==2.4.6
 snowflake-sqlalchemy==1.2.4
