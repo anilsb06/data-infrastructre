@@ -256,7 +256,7 @@ spec:
             - name: REPO
               value: "https://gitlab.com/gitlab-data/analytics.git"
             - name: GIT_BRANCH
-              value: "airflow_upgrade_testing"
+              value: "master"
           volumeMounts:
             - name: analytics-repo
               mountPath: /usr/local/airflow/analytics
