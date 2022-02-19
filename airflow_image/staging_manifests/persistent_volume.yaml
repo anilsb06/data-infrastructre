@@ -2,7 +2,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: persistent-airflow-logs
-  namespace: staging
+  namespace: default
 spec:
   accessModes:
     - ReadWriteOnce
