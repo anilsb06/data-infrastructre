@@ -251,7 +251,7 @@ spec:
           image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.21
           imagePullPolicy: Always
           command: ["/bin/sh", "-c"]
-          args: ["git clone -b master --single-branch $REPO --depth 1"]
+          args: ["git clone -b revert-35fa49a3 --single-branch $REPO --depth 1"]
           env:
             - name: REPO
               value: "https://gitlab.com/gitlab-data/analytics.git"
