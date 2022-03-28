@@ -105,7 +105,7 @@ spec:
           env:
             # General
             - name: GIT_BRANCH
-              value: "master"
+              value: "revert-35fa49a3"
             - name: IN_CLUSTER
               value: "False"
             - name: GOOGLE_APPLICATION_CREDENTIALS

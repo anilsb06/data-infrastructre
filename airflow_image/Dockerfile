@@ -4,12 +4,13 @@ FROM python:3.8
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
+
 # Airflow Config
-ARG AIRFLOW_VERSION=2.2.2
+ARG AIRFLOW_VERSION=1.10.15
 ARG PYTHON_VERSION=3.8
 ARG AIRFLOW_HOME=/usr/local/airflow
 #ARG AIRFLOW_DEPS="crypto,gcp_api,google_auth,kubernetes,password,slack"
-ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-2.2.2/constraints-no-providers-3.8.txt"
+ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-$AIRFLOW_VERSION/constraints-no-providers-3.8.txt"
 ENV AIRFLOW_GPL_UNIDECODE yes
 
 ENV AIRFLOW_HOME=${AIRFLOW_HOME}
