@@ -9,8 +9,7 @@ RUN pip install -r requirements.txt
 ARG AIRFLOW_VERSION=1.10.15
 ARG PYTHON_VERSION=3.8
 ARG AIRFLOW_HOME=/usr/local/airflow
-#ARG AIRFLOW_DEPS="crypto,gcp_api,google_auth,kubernetes,password,slack"
-ARG CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-$AIRFLOW_VERSION/constraints-no-providers-3.8.txt"
+ARG AIRFLOW_DEPS="crypto,gcp_api,google_auth,kubernetes,password,slack"
 ENV AIRFLOW_GPL_UNIDECODE yes
 
 ENV AIRFLOW_HOME=${AIRFLOW_HOME}
@@ -25,7 +24,7 @@ RUN mv ./kubectl /usr/local/bin/kubectl
 
 # Airflow Installation
 RUN pip install -U pip
-RUN pip install apache-airflow==${AIRFLOW_VERSION} --constraint ${CONSTRAINT_URL}
+RUN pip install apache-airflow[${AIRFLOW_DEPS}]==${AIRFLOW_VERSION}
 COPY airflow.cfg ${AIRFLOW_HOME}/airflow.cfg
 
 
