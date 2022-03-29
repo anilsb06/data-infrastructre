@@ -89,7 +89,7 @@ spec:
               exec:
                 command: ["/bin/sh", "-c", "gcloud auth activate-service-account --key-file /secrets/cloudsql/cloudsql-credentials"]
           command: ["airflow"]
-          args: ["webserver"]
+          args: ["scheduler"]
 
         # airflow webserver
         - name: webserver
@@ -149,13 +149,13 @@ spec:
           command: ["airflow"]
           args: ["webserver"]
           ports:
-          - containerPort: 8081
+          - containerPort: 8080
             protocol: TCP
           livenessProbe:
             failureThreshold: 3
             httpGet:
               path: "/health"
-              port: 8081
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 60
             periodSeconds: 60
@@ -165,7 +165,7 @@ spec:
             failureThreshold: 3
             httpGet:
               path: "/health"
-              port: 8081
+              port: 8080
               scheme: HTTP
             initialDelaySeconds: 60
             periodSeconds: 60
