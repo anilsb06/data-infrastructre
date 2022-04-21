@@ -163,7 +163,7 @@ prod_analyst_publish:
 
 
 # ======
-# analyst Image
+# CI Python check image
 # ======
 
 mr_ci_python_build:
