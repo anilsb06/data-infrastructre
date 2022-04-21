@@ -163,6 +163,36 @@ prod_analyst_publish:
 
 
 # ======
+# CI Python check image
+# ======
+
+mr_ci_python_build:
+  <<: *mr_docker_publish
+  environment:
+    name: review/$CI_COMMIT_REF_NAME
+    on_stop: mr_image_delete
+  variables:
+    IMAGE_NAME: ci-python-image
+  before_script:
+    - cd ci_python_image
+  only:
+    refs:
+      - merge_requests
+    changes:
+      - ci_python_image/*
+  except:
+    changes:
+      - "*.md"
+
+prod_ci_python_publish:
+  <<: *prod_docker_publish
+  variables:
+    IMAGE_NAME: ci-python-image
+  before_script:
+    - cd ci_python_image
+
+
+# ======
 # Delete Images
 # ======
 
@@ -184,6 +214,7 @@ mr_image_delete:
     - reg -r $CI_REGISTRY -u gitlab-ci-token -p $CI_BUILD_TOKEN rm $CI_REGISTRY_IMAGE/analyst_image:$CI_COMMIT_REF_NAME || true
     - reg -r $CI_REGISTRY -u gitlab-ci-token -p $CI_BUILD_TOKEN rm $CI_REGISTRY_IMAGE/data_image:$CI_COMMIT_REF_NAME || true
     - reg -r $CI_REGISTRY -u gitlab-ci-token -p $CI_BUILD_TOKEN rm $CI_REGISTRY_IMAGE/dbt_image:$CI_COMMIT_REF_NAME || true
+    - reg -r $CI_REGISTRY -u gitlab-ci-token -p $CI_BUILD_TOKEN rm $CI_REGISTRY_IMAGE/ci_python_image:$CI_COMMIT_REF_NAME || true
   except:
     changes:
       - "*.md"
