@@ -12,6 +12,7 @@ dill==0.3.4
 executing==0.8.3
 flake8==4.0.1
 future==0.18.2
+gitlabdata==0.3.13
 idna==3.3
 importlib-metadata==4.2.0
 iniconfig==1.1.1
