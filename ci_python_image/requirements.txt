@@ -42,7 +42,6 @@ Pygments==2.11.2
 pylint==2.13.7
 pyparsing==3.0.8
 pytest==7.1.1
-PyYAML==5.4.1
 radon==5.1.0
 requests==2.27.1
 six==1.16.0
