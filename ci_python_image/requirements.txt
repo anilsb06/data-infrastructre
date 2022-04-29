@@ -12,6 +12,7 @@ dill==0.3.4
 executing==0.8.3
 flake8==4.0.1
 future==0.18.2
+gitlabdata==0.3.13
 idna==3.3
 importlib-metadata==4.2.0
 iniconfig==1.1.1
@@ -41,7 +42,6 @@ Pygments==2.11.2
 pylint==2.13.7
 pyparsing==3.0.8
 pytest==7.1.1
-PyYAML==6.0
 radon==5.1.0
 requests==2.27.1
 six==1.16.0
