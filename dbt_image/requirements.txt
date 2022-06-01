@@ -1,7 +1,7 @@
-dbt==0.19.1
-gitlabdata==0.3.9
-pandas==0.25.3
-requests==2.22.0
-sqlfluff==0.9.3
-sqlfluff-templater-dbt==0.9.3
-urllib3==1.24.0
+dbt-snowflake==1.1.0
+gitlabdata==0.3.13
+pandas==1.4.2
+requests==2.27.1
+sqlfluff==0.13.2
+sqlfluff-templater-dbt==0.13.2
+urllib3==1.26.9
