@@ -219,3 +219,4 @@ widgetsnbextension==3.6.1
 wrapt==1.14.1
 xgboost==1.6.1
 zipp==3.8.0
+papermill==2.3.4
