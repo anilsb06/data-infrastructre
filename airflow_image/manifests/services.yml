@@ -7,7 +7,7 @@ spec:
   selector:
     app: airflow
   ports:
-  - port: 8080
+  - port: 443
     protocol: TCP
     targetPort: 8080
   type: NodePort

@@ -1,8 +1,10 @@
 dbt-snowflake==1.1.0
+dbt-core==1.1.0
 gitlabdata==0.3.13
+fire==0.4.0
 pandas==1.4.2
-montecarlodata==0.25.1
-requests==2.27.1
+requests==2.28.1
 sqlfluff==0.13.2
 sqlfluff-templater-dbt==0.13.2
 urllib3==1.26.9
+montecarlodata==0.25.3
