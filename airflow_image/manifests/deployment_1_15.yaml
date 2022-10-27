@@ -104,10 +104,10 @@ spec:
           image: registry.gitlab.com/gitlab-data/data-image/airflow-image:v0.0.28
           resources:
             limits:
-              memory: "8000Mi"
+              memory: "16000Mi"
               cpu: "3000m"
             requests:
-              memory: "4000Mi"
+              memory: "8000Mi"
               cpu: "2000m"
           env:
             # General
@@ -174,7 +174,7 @@ spec:
             initialDelaySeconds: 60
             periodSeconds: 60
             successThreshold: 1
-            timeoutSeconds: 10
+            timeoutSeconds: 60
           readinessProbe:
             failureThreshold: 3
             httpGet:
