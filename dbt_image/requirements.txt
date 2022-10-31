@@ -2,6 +2,7 @@ dbt-snowflake==1.1.0
 dbt-core==1.1.0
 gitlabdata==0.3.13
 fire==0.4.0
+loguru==0.6.0
 pandas==1.4.2
 requests==2.28.1
 simple-dependency-resolver==0.1.1
