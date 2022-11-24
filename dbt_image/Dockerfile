@@ -15,7 +15,7 @@ RUN pip install -r requirements.txt
 RUN apt-get update
 RUN apt-get install -y vim
 RUN apt-get install -y bash-completion
-
+RUN apt-get install -y zip unzip
 # Install dbt completion script
 RUN curl https://raw.githubusercontent.com/fishtown-analytics/dbt-completion.bash/master/dbt-completion.bash > ~/.dbt-completion.bash
 RUN /bin/bash -c "source ~/.dbt-completion.bash"
