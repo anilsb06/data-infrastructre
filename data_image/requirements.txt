@@ -35,6 +35,7 @@ python-dateutil==2.8.1
 pytz==2019.3
 PyYAML==5.4.1
 remarshal==0.10.0
+responses==0.22.0
 requests==2.22.0
 salesforce-bulk==2.1.0
 simple-salesforce==1.1.0
