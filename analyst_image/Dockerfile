@@ -17,11 +17,5 @@ RUN pip install --no-cache-dir --ignore-installed --requirement /tmp/requirement
 
 USER root
 
-# Create directory for dbt config
-RUN mkdir -p "/home/${NB_USER}/.dbt"
-
-# Copy dbt profile
-COPY profiles.yml "/home/${NB_USER}/.dbt/profiles.yml"
-
 #Ignore the crazy warnings, they are expected.
 RUN cd /home/jovyan && git clone -b issue191 https://github.com/jcrudy/py-earth.git && cd /home/jovyan/py-earth && /opt/conda/bin/python -q setup.py install --cythonize && rm -R /home/jovyan/py-earth
