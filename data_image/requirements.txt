@@ -35,6 +35,7 @@ python-dateutil==2.8.1
 pytz==2019.3
 PyYAML==5.4.1
 remarshal==0.10.0
+responses==0.22.0
 requests==2.22.0
 salesforce-bulk==2.1.0
 simple-salesforce==1.1.0
@@ -46,6 +47,6 @@ sql-metadata==1.11.0
 sqlparse==0.4.1
 tldextract==2.2.2
 toolz==0.10.0
-urllib3==1.23
+urllib3==1.25.10
 xenon==0.7
 zeep==3.4.0
