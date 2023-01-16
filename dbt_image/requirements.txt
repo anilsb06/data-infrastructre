@@ -1,5 +1,5 @@
-dbt-snowflake==1.1.0
-dbt-core==1.1.0
+dbt-snowflake==1.2.0
+dbt-core==1.2.3
 gitlabdata==0.3.13
 fire==0.4.0
 loguru==0.6.0
