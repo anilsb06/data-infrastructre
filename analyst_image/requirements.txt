@@ -42,8 +42,8 @@ fonttools==4.33.3
 fsspec==2022.5.0
 gast==0.4.0
 gitdb==4.0.9
-gitlabdata==0.3.17
-gitlabds==1.0.16
+gitlabdata==0.3.19
+gitlabds==1.0.18
 GitPython==3.1.27
 google-api-core==2.8.2
 google-auth==2.9.0
@@ -85,7 +85,7 @@ jupyter-resource-usage==0.6.1
 jupyter-server==1.18.0
 jupyter-server-mathjax==0.2.5
 jupyterlab==3.4.3
-jupyterlab-code-formatter==1.4.11
+jupyterlab-code-formatter==1.5.3
 jupyterlab-execute-time==2.1.0
 jupyterlab-git==0.37.1
 jupyterlab-pygments==0.2.2
@@ -126,6 +126,7 @@ notebook==6.4.12
 notebook-shim==0.1.0
 numba==0.55.2
 numpy==1.22.4
+optuna==3.0.4
 oauthlib==3.2.0
 opt-einsum==3.3.0
 oscrypto==1.3.0
@@ -182,7 +183,7 @@ slicer==0.0.7
 smmap==5.0.0
 sniffio==1.2.0
 snowflake-connector-python==2.7.8
-snowflake-sqlalchemy==1.3.4
+snowflake-sqlalchemy==1.4.4
 soupsieve==2.3.2.post1
 SQLAlchemy==1.4.39
 sqlparse==0.4.2
@@ -220,3 +221,4 @@ wrapt==1.14.1
 xgboost==1.6.1
 zipp==3.8.0
 papermill==2.3.4
+pygsheets
