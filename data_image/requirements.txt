@@ -51,3 +51,4 @@ toolz==0.10.0
 urllib3==1.25.10
 xenon==0.7
 zeep==3.4.0
+pygsheets
