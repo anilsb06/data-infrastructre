@@ -42,7 +42,7 @@ fonttools==4.33.3
 fsspec==2022.5.0
 gast==0.4.0
 gitdb==4.0.9
-gitlabdata==0.3.19
+gitlabdata==0.3.20
 gitlabds==1.0.18
 GitPython==3.1.27
 google-api-core==2.8.2
@@ -221,4 +221,3 @@ wrapt==1.14.1
 xgboost==1.6.1
 zipp==3.8.0
 papermill==2.3.4
-pygsheets
