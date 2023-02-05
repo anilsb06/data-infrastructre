@@ -19,7 +19,8 @@ google-cloud-storage==2.7.0
 google-crc32c==1.5.0
 google-resumable-media==2.4.1
 googleapis-common-protos==1.58.0
-grpcio==1.30.0
+grpcio==1.51.1
+grpcio-status==1.51.1
 gspread==3.1.0
 gspread_dataframe==3.0.2
 henry==0.1.1
