@@ -9,4 +9,4 @@ simple-dependency-resolver==0.1.1
 sqlfluff==1.4.5
 sqlfluff-templater-dbt==1.4.5
 urllib3==1.26.9
-montecarlodata==0.34.2
+montecarlodata==0.36.0
