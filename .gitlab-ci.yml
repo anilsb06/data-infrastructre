@@ -77,23 +77,22 @@ prod_data_publish:
 
 mr_image_delete:
   stage: delete
-  image: docker:latest
-  services:
-    - docker:dind
+  image: curlimages/curl:7.86.0
   environment:
     name: review/$CI_COMMIT_REF_NAME
     action: stop
-  variables:
-    GIT_STRATEGY: none
   before_script:
-    - wget -O /usr/bin/reg https://github.com/genuinetools/reg/releases/download/v0.13.0/reg-linux-amd64
-    - chmod +x /usr/bin/reg
+    - curl --fail --show-error --location "https://github.com/genuinetools/reg/releases/download/v$REG_VERSION/reg-linux-amd64" --output ./reg
+    - echo "$REG_SHA256  ./reg" | sha256sum -c -
+    - chmod a+x ./reg
   script:
-    - reg -r $CI_REGISTRY -u gitlab-ci-token -p $CI_BUILD_TOKEN rm $CI_REGISTRY_IMAGE/data_image:$CI_COMMIT_REF_NAME || true
-  except:
-    changes:
-      - "*.md"
+    - ./reg rm -d --auth-url $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY_IMAGE/data_image:$CI_COMMIT_REF_NAME
+  variables:
+    REG_SHA256: ade837fc5224acd8c34732bf54a94f579b47851cc6a7fd5899a98386b782e228
+    REG_VERSION: 0.16.1
   only:
     refs:
       - merge_requests
+  except:
+    - main
   when: manual
