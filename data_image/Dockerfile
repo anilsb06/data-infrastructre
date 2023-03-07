@@ -9,8 +9,10 @@ RUN pip install -U pip
 RUN pip install -r requirements.txt
 
 # Install Google SQL Proxy
+ENV CLOUD_SQL_CONNECTION_NAME="gitlab-analysis:us-west1:airflow-1-15-postgres"
 RUN wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O /usr/bin/cloud_sql_proxy
 RUN chmod +x /usr/bin/cloud_sql_proxy
+CMD ["./usr/bin/cloud_sql_proxy" "-instances=$CLOUD_SQL_CONNECTION_NAME=tcp:127.0.0.1:5432"]
 
 # Install Google Cloud SDK
 ENV CLOUD_SDK_REPO="cloud-sdk-stretch"
